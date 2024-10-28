@@ -6,6 +6,7 @@ import {
   Body,
   // Req,
   UploadedFile,
+  Param,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 
@@ -21,9 +22,9 @@ export class ClassRoomController {
     private readonly classRoomService: ClassRoomService,
   ) {}
 
-  @Post()
   @ApiOperation({ summary: "Create class room" })
   @UseInterceptors(FileInterceptor("file", {}))
+  @Post("/")
   async createClassRoom(
     @UploadedFile() file: Express.Multer.File,
     @Body() createClassRoomDto: CreateClassRoomDto,
@@ -38,10 +39,13 @@ export class ClassRoomController {
     return classRoom;
   }
 
-  @Get()
   @ApiOperation({ summary: "Find class room by id" })
-  async findClassRoomById(classRoomId: string) {
-    // const classRoom = await this.classRoomService
-    
+  @Get("/:id")
+  async findClassRoomById(@Param("id") id: string) {
+    const classRoom = await this.classRoomService.findClassRoomById(id);
+
+    return classRoom;
   }
+
+  // update class room
 }

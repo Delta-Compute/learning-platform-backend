@@ -6,6 +6,7 @@ import { ConfigModule } from "@nestjs/config";
 import { AuthModule } from "./modules/auth/auth.module";
 import { UserModule } from "./modules/user/user.module";
 import { ClassRoomModule } from "./modules/class-room/class-room.module"; 
+import { AssignmentModule } from "./modules/assignment/assignment.module";
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { ClassRoomModule } from "./modules/class-room/class-room.module";
     AuthModule,
     UserModule,
     ClassRoomModule,
+    AssignmentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
