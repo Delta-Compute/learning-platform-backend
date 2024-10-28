@@ -31,4 +31,10 @@ export class ClassRoomService {
 
     return classRoom;
   }
+
+  async findClassRoomById(id: string) {
+    const classRoom = await this.classRoomRepository.findById(id);
+
+    return classRoom;
+  }
 }

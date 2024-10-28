@@ -26,6 +26,22 @@ export class ClassRoomRepository {
     };
   }
 
+  public async findById(id: string): Promise<ClassRoomDto | null> {
+    const reference = this.collection.doc(id);
+    const document = await reference.get();
+
+    if (!document.exists) {
+      return null;
+    }
+    
+    const classRoom = new ClassRoomDto({
+      ...document.data(),
+      id: document.id,
+    });
+
+    return classRoom;
+  }
+
   public async getAllByUserId(): Promise<any[]> {
     return [];
   }
