@@ -2,14 +2,17 @@ import * as admin from "firebase-admin";
 
 import { Injectable } from "@nestjs/common";
 
+import { ClassRoomDto } from "./entities/class-room.entity";
 import { CreateClassRoomDto } from "./dto/create-class-room-dto";
 
-import { StorageService } from "src/storage/storage.service";
+import { StorageService } from "../storage/storage.service";
+import { ClassRoomRepository } from "./class-room.repository";
 
 @Injectable()
 export class ClassRoomService {
   public constructor(
     public readonly storageService: StorageService,
+    public readonly classRoomRepository: ClassRoomRepository,
   ) {}
 
   async createClassRoom(createClassRoomDto: CreateClassRoomDto) {
@@ -18,5 +21,14 @@ export class ClassRoomService {
         createClassRoomDto.file,
       );
     }
+
+    const classRoom = await this.classRoomRepository.create(
+      new ClassRoomDto({
+        ...createClassRoomDto,
+        createdAt: new Date().getTime(),
+      }),
+    );
+
+    return classRoom;
   }
 }

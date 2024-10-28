@@ -5,6 +5,8 @@ import { Injectable } from "@nestjs/common";
 import { User } from "../../common/types/interfaces/user.interface";
 
 import { CreateUserDto } from "./dto/create-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
+import { instanceToPlain } from "class-transformer";
 
 @Injectable()
 export class UserRepository {
@@ -34,8 +36,8 @@ export class UserRepository {
       (doc) =>
         ({
           id: doc.id,
-          name: doc.data().name,
-          role: doc.data().roles,
+          firstName: doc.data().firstName,
+          lastName: doc.data().lastName,
           email: doc.data().email,
         }) as unknown as User,
     );
@@ -45,7 +47,6 @@ export class UserRepository {
   
   public async findById(
     id: string,
-    option?: { withCode: boolean },
   ): Promise<User | null> {
     const reference = this.collection.doc(id);
     const document = await reference.get();
@@ -56,9 +57,7 @@ export class UserRepository {
 
     return {
       id: document.id,
-      name: document.data().name,
       email: document.data().email,
-      role: document.data().role,
     } as User;
   }
 
@@ -76,7 +75,8 @@ export class UserRepository {
 
     return {
       id: document.id,
-      name: document.data().name,
+      firstName: document.data().firstName,
+      lastName: document.data().lastName,
       email: document.data().email,
       role: document.data().role,
       password: document.data().password,
@@ -85,10 +85,10 @@ export class UserRepository {
 
   public async updateById(
     id: string,
-    updates: Partial<CreateUserDto>,
+    updates: Partial<UpdateUserDto>,
   ): Promise<User> {
     const reference = this.collection.doc(id);
-    await reference.update(updates);
+    await reference.update(instanceToPlain(updates));
 
     const updatedDocument = await reference.get();
 
@@ -100,6 +100,7 @@ export class UserRepository {
 
   public async deleteById(id: string): Promise<void> {
     const document = this.collection.doc(id);
+
     await document.delete();
   }
 }

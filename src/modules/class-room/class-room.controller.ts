@@ -4,7 +4,7 @@ import {
   Get,
   UseInterceptors,
   Body,
-  Req,
+  // Req,
   UploadedFile,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
@@ -12,9 +12,9 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { CreateClassRoomDto } from "./dto/create-class-room-dto";
 import { ClassRoomService } from "./class-room.service";
 
-import { ApiTags } from "@nestjs/swagger";
+import { ApiTags, ApiOperation } from "@nestjs/swagger";
 
-@ApiTags("ClassRoom")
+@ApiTags("Class Room")
 @Controller("class-room")
 export class ClassRoomController {
   constructor(
@@ -22,6 +22,7 @@ export class ClassRoomController {
   ) {}
 
   @Post()
+  @ApiOperation({ summary: "Create class room" })
   @UseInterceptors(FileInterceptor("file", {}))
   async createClassRoom(
     @UploadedFile() file: Express.Multer.File,
@@ -38,7 +39,9 @@ export class ClassRoomController {
   }
 
   @Get()
+  @ApiOperation({ summary: "Find class room by id" })
   async findClassRoomById(classRoomId: string) {
+    // const classRoom = await this.classRoomService
     
   }
 }

@@ -4,11 +4,15 @@ import { AppService } from "./app.service";
 import { ConfigModule } from "@nestjs/config";
 
 import { AuthModule } from "./modules/auth/auth.module";
+import { UserModule } from "./modules/user/user.module";
+import { ClassRoomModule } from "./modules/class-room/class-room.module"; 
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
+    UserModule,
+    ClassRoomModule,
   ],
   controllers: [AppController],
   providers: [AppService],

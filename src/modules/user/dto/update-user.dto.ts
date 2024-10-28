@@ -8,9 +8,18 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   @IsString()
   refreshToken?: string;
 
+  @IsString()
   @IsOptional()
-  name?: string;
+  firstName?: string;
+
+  @IsString()
+  @IsOptional()
+  lastName?: string;
 
   @IsOptional()
   email?: string;
+
+  @IsString()
+  @IsOptional()
+  role?: string;
 }

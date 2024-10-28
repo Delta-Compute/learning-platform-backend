@@ -2,6 +2,8 @@ import * as admin from "firebase-admin";
 
 import { Injectable } from "@nestjs/common";
 
+import { ClassRoomDto } from "./entities/class-room.entity";
+
 @Injectable()
 export class ClassRoomRepository {
   private db: FirebaseFirestore.Firestore;
@@ -14,8 +16,8 @@ export class ClassRoomRepository {
     this.collection = this.db.collection("class-rooms");
   }
 
-  public async create(createClassDto: any) {
-    const reference = await this.collection.add(createClassDto);
+  public async create(createClassDto: ClassRoomDto) {
+    const reference = await this.collection.add(createClassDto.toPlainObject());
     const document = await reference.get();
 
     return {

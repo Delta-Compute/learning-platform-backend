@@ -22,8 +22,12 @@ export class SignInDto extends AuthUserDto {
 
 export class SignUpDto extends SignInDto {
   @IsString()
-  @IsNotEmpty()
-  name: string;
+  @IsOptional()
+  firstName: string;
+
+  @IsString()
+  @IsOptional()
+  lastName: string;
 
   @IsEmail()
   email: string;

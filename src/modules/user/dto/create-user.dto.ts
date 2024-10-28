@@ -8,15 +8,20 @@ export class CreateUserDto {
   @IsString()
   id?: string;
 
+  // @IsString()
+  // school: string;
+
   @IsOptional()
   @IsString()
   refreshToken?: string;
   
   @IsString()
-  name: string;
+  @IsOptional()
+  firstName?: string;
 
   @IsString()
-  role: string;
+  @IsOptional()
+  lastName?: string;
 
   @IsEmail()
   @IsOptional()
