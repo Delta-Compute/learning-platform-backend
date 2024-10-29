@@ -17,4 +17,12 @@ export class AssignmentController {
   public async createAssignment(@Body() createAssignmentDto: CreateAssignmentDto) {
     return this.assignmentService.createAssignment(createAssignmentDto);
   }
+
+  // @ApiOperation({ summary: "Create an assignment" })
+  // @Get("/assignments/:classRoomId")
+  // public async getClassRoomAssignments(@Param("classRoomId") classRoomId: string) {
+  //   return this.assignmentService.getClassRoomAssignments(classRoomId);
+  // }
+  
+  // get for student by email
 }
