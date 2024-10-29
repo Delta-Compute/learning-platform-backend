@@ -47,5 +47,13 @@ export class ClassRoomController {
     return classRoom;
   }
 
+  @ApiOperation({ summary: "Get all class rooms" })
+  @Get("/class-rooms/find-all")
+  async findAllClassRooms() {
+    const classRooms = await this.classRoomService.findAllClassRooms();
+
+    return classRooms;
+  }
+
   // update class room
 }

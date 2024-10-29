@@ -6,6 +6,7 @@ export class AssignmentDto {
   createdAt: number;
 
   public constructor(partial: Partial<AssignmentDto>) {
+    this.id = partial?.id || "";
     this.description = partial.description || "";
     this.classRoomId = partial.classRoomId || "";
     this.createdAt =

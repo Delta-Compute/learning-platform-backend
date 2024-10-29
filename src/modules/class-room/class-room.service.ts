@@ -37,4 +37,10 @@ export class ClassRoomService {
 
     return classRoom;
   }
+
+  async findAllClassRooms() {
+    const classRooms = await this.classRoomRepository.findAll();
+
+    return classRooms;
+  }
 }

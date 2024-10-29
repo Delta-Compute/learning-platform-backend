@@ -42,6 +42,19 @@ export class ClassRoomRepository {
     return classRoom;
   }
 
+  public async findAll(): Promise<ClassRoomDto[]> {
+    const snapshot = await this.collection.get();
+  
+    const classRooms = snapshot.docs.map((doc) => {
+      return new ClassRoomDto({
+        ...doc.data(),
+        id: doc.id,
+      });
+    });
+
+    return classRooms;
+  }
+
   public async getAllByUserId(): Promise<any[]> {
     return [];
   }
