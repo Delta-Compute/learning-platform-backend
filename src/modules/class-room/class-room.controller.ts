@@ -47,7 +47,6 @@ export class ClassRoomController {
     return classRoom;
   }
 
-<<<<<<< HEAD
   @ApiOperation({ summary: "Get all class rooms by teacherId" })
   @Get("/")
   async getAllClassRoomsByUserId(@Query("teacherId") teacherId: string) {
@@ -63,14 +62,6 @@ export class ClassRoomController {
       console.error("Error fetching classrooms:", error);
       throw new BadRequestException("Failed to fetch classrooms");
     }
-=======
-  @ApiOperation({ summary: "Get all class rooms" })
-  @Get("/class-rooms/find-all")
-  async findAllClassRooms() {
-    const classRooms = await this.classRoomService.findAllClassRooms();
-
-    return classRooms;
->>>>>>> 385ebe0b8b99d8dfe7fb266c10240ed3be0be5fc
   }
 
   // update class room
