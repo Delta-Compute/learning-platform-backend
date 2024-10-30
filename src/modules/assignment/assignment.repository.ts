@@ -93,6 +93,8 @@ export class AssignmentRepository {
       }
     }
 
+    console.log(assignments);
+
     return assignments;
   }
 }
