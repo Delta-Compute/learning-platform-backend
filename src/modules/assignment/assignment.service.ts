@@ -27,4 +27,10 @@ export class AssignmentService {
 
     return assignments;
   }
+
+  async getAssignmentsByStudentEmail(studentEmail: string) {
+    const assignments = await this.assignmentRepository.findAssignmentsByStudentEmail(studentEmail);
+    
+    return assignments;
+  }
 }

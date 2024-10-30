@@ -37,8 +37,6 @@ export class AssignmentRepository {
       assignmentIds: admin.firestore.FieldValue.arrayUnion(reference.id),
     });
 
-    console.log("");
-
     return {
       ...document.data(),
       id: document.id,
@@ -67,6 +65,34 @@ export class AssignmentRepository {
       }
     }
   
+    return assignments;
+  }
+
+  public async findAssignmentsByStudentEmail(studentEmail: string): Promise<AssignmentDto[]> {
+    const classRoomsQuery = await this.classRoomCollection
+      .where("studentEmails", "array-contains", studentEmail)
+      .get();
+
+    const assignments: AssignmentDto[] = [];
+
+    for (const classRoomDoc of classRoomsQuery.docs) {
+      const { assignmentIds } = classRoomDoc.data() as { assignmentIds: string[] };
+
+      if (!assignmentIds || assignmentIds.length === 0) {
+        continue;
+      }
+
+      for (const assignmentId of assignmentIds) {
+        const assignmentDoc = await this.assignmentCollection.doc(assignmentId).get();
+        if (assignmentDoc.exists) {
+          assignments.push(new AssignmentDto({
+            ...assignmentDoc.data(),
+            id: assignmentDoc.id,
+          }));
+        }
+      }
+    }
+
     return assignments;
   }
 }

@@ -18,11 +18,17 @@ export class AssignmentController {
     return this.assignmentService.createAssignment(createAssignmentDto);
   }
 
-  // @ApiOperation({ summary: "Create an assignment" })
-  // @Get("/assignments/:classRoomId")
-  // public async getClassRoomAssignments(@Param("classRoomId") classRoomId: string) {
-  //   return this.assignmentService.getClassRoomAssignments(classRoomId);
-  // }
-  
+  @ApiOperation({ summary: "Get class room assignments" })
+  @Get("/assignments/:classRoomId")
+  public async getClassRoomAssignments(@Param("classRoomId") classRoomId: string) {
+    return this.assignmentService.getClassRoomAssignments(classRoomId);
+  }
+
+  @ApiOperation({ summary: "Get all assignments for student" })
+  @Get("/assignments/find-assignments/:studentEmail")
+  async getAssignmentsByStudentEmail(@Param("studentEmail") studentEmail: string) {
+    return this.assignmentService.getAssignmentsByStudentEmail(studentEmail);
+  }
+
   // get for student by email
 }
