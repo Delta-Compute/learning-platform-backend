@@ -1,5 +1,5 @@
-import { 
-  Controller, 
+import {
+  Controller,
   Post,
   Get,
   UseInterceptors,
@@ -7,6 +7,8 @@ import {
   // Req,
   UploadedFile,
   Param,
+  BadRequestException,
+  Query,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 
@@ -18,9 +20,7 @@ import { ApiTags, ApiOperation } from "@nestjs/swagger";
 @ApiTags("Class Room")
 @Controller("class-room")
 export class ClassRoomController {
-  constructor(
-    private readonly classRoomService: ClassRoomService,
-  ) {}
+  constructor(private readonly classRoomService: ClassRoomService) {}
 
   @ApiOperation({ summary: "Create class room" })
   @UseInterceptors(FileInterceptor("file", {}))
@@ -45,6 +45,23 @@ export class ClassRoomController {
     const classRoom = await this.classRoomService.findClassRoomById(id);
 
     return classRoom;
+  }
+
+  @ApiOperation({ summary: "Get all class rooms by teacherId" })
+  @Get("/")
+  async getAllClassRoomsByUserId(@Query("teacherId") teacherId: string) {
+    if (!teacherId) {
+      throw new BadRequestException("teacherId is required");
+    }
+
+    try {
+      const classRooms =
+        await this.classRoomService.findClassesByTeacherId(teacherId);
+      return classRooms;
+    } catch (error) {
+      console.error("Error fetching classrooms:", error);
+      throw new BadRequestException("Failed to fetch classrooms");
+    }
   }
 
   // update class room

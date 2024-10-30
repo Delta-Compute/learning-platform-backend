@@ -42,7 +42,31 @@ export class ClassRoomRepository {
     return classRoom;
   }
 
-  public async getAllByUserId(): Promise<any[]> {
-    return [];
+  public async getAllByUserId(userId: string): Promise<ClassRoomDto[]> {
+    if (!userId) {
+      throw new Error("User ID must be provided and cannot be empty");
+    }
+  
+    try {
+      const snapshot = await this.collection
+        .where('teacherId', '==', userId)
+        .get();
+  
+      if (snapshot.empty) {
+        return [];
+      }
+  
+      const classRooms: ClassRoomDto[] = snapshot.docs.map(doc => {
+        return new ClassRoomDto({
+          ...doc.data(),
+          id: doc.id,
+        });
+      });
+  
+      return classRooms;
+    } catch (error) {
+      console.error("Error fetching classrooms by user ID:", error);
+      throw new Error("Failed to fetch classrooms by user ID");
+    }
   }
 } 

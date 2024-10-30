@@ -37,4 +37,10 @@ export class ClassRoomService {
 
     return classRoom;
   }
+
+  async findClassesByTeacherId(teacherId: string) {
+    const classRooms = await this.classRoomRepository.getAllByUserId(teacherId);
+
+    return classRooms;
+  }
 }
