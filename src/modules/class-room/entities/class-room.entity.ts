@@ -9,7 +9,11 @@ export class ClassRoomDto {
   createdAt: number;
 
   public constructor(partial: Partial<ClassRoomDto>) {
+<<<<<<< HEAD
     this.id = partial?.id || "";
+=======
+    this.id = partial?.id;
+>>>>>>> 385ebe0b8b99d8dfe7fb266c10240ed3be0be5fc
     this.name = partial?.name || "";
     this.teacherId = partial?.teacherId || "";
     this.logo = partial?.logo || "";
