@@ -15,11 +15,15 @@ export class AssignmentRepository {
   private classRoomCollection: admin.firestore.CollectionReference<
     admin.firestore.DocumentData
   >;
+  private classRoomsProgressCollection: admin.firestore.CollectionReference<
+    admin.firestore.DocumentData
+  >;
 
   public constructor() {
     this.db = admin.firestore();
     this.assignmentCollection = this.db.collection("assignments");
     this.classRoomCollection = this.db.collection("class-rooms");
+    this.classRoomsProgressCollection = this.db.collection("class-rooms-progress");
   }
 
   public async create(createAssignmentDto: AssignmentDto) {
@@ -36,6 +40,27 @@ export class AssignmentRepository {
     await classRoomRef.update({
       assignmentIds: admin.firestore.FieldValue.arrayUnion(reference.id),
     });
+
+    const classRoomData = classRoomDoc.data();
+    const studentEmails = classRoomData?.studentEmails as string[];
+
+    if (studentEmails.length > 0) {
+      const studentsProgress = studentEmails.map(email => ({
+        studentEmail: email,
+        progress: false,
+      }));
+
+      // add name of user
+      // add user feedback
+  
+      const classRoomProgressRef = this.classRoomsProgressCollection.doc();
+      
+      await classRoomProgressRef.set({
+        assignmentId: reference.id,
+        classRoomId: classRoomDoc.id,
+        studentsProgress,
+      });
+    }
 
     return {
       ...document.data(),
@@ -57,6 +82,7 @@ export class AssignmentRepository {
 
     for (const assignmentId of assignmentIds) {
       const assignmentDoc = await this.assignmentCollection.doc(assignmentId).get();
+      
       if (assignmentDoc.exists) {
         assignments.push(new AssignmentDto({
           ...assignmentDoc.data(),
@@ -92,8 +118,6 @@ export class AssignmentRepository {
         }
       }
     }
-
-    console.log(assignments);
 
     return assignments;
   }

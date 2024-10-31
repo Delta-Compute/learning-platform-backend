@@ -7,6 +7,7 @@ import { AuthModule } from "./modules/auth/auth.module";
 import { UserModule } from "./modules/user/user.module";
 import { ClassRoomModule } from "./modules/class-room/class-room.module"; 
 import { AssignmentModule } from "./modules/assignment/assignment.module";
+import { ClassRoomProgressModule } from "./class-room-progress/class-room-progress.module";
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { AssignmentModule } from "./modules/assignment/assignment.module";
     UserModule,
     ClassRoomModule,
     AssignmentModule,
+    ClassRoomProgressModule,
   ],
   controllers: [AppController],
   providers: [AppService],

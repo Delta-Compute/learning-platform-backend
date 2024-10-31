@@ -1,0 +1,69 @@
+import * as admin from "firebase-admin";
+
+import { NotFoundException } from "@nestjs/common";
+
+import { Injectable } from "@nestjs/common";
+
+@Injectable()
+export class ClassRoomProgressRepository {
+  private db: FirebaseFirestore.Firestore;
+  private collection: admin.firestore.CollectionReference<
+    admin.firestore.DocumentData
+  >;
+
+  public constructor() {
+    this.db = admin.firestore();
+    this.collection = this.db.collection("class-rooms-progress");
+  }
+
+  public async findClassRoomProgress(classRoomId: string, assignmentId: string) {
+    const querySnapshot = await this.collection
+      .where("classRoomId", "==", classRoomId)
+      .where("assignmentId", "==", assignmentId)
+      .limit(1) 
+      .get();
+
+    if (querySnapshot.empty) {
+      throw new NotFoundException("Class room progress not found");
+    }
+
+    const classRoomProgressDoc = querySnapshot.docs[0];
+
+    return {
+      id: classRoomProgressDoc.id,
+      ...classRoomProgressDoc.data(),
+    };
+  }
+
+  public async updateClassRoomProgress(classRoomId: string, assignmentId: string, studentEmail: string, feedback: string) {
+    const querySnapshot = await this.collection
+      .where("classRoomId", "==", classRoomId)
+      .where("assignmentId", "==", assignmentId)
+      .limit(1) 
+      .get();
+
+    if (querySnapshot.empty) {
+      throw new NotFoundException("Class room progress document not found");
+    }
+  
+    const classRoomProgressDoc = querySnapshot.docs[0];
+    const studentsProgress = classRoomProgressDoc.data().studentsProgress || [];
+
+    const updatedStudentsProgress = studentsProgress.map((student) => {
+      if (student.studentEmail === studentEmail) {
+        return {
+          ...student,
+          progress: true,        
+          feedback: feedback,
+        };
+      }
+      return student;
+    });
+
+    await classRoomProgressDoc.ref.update({
+      studentsProgress: updatedStudentsProgress
+    });
+  
+    return { message: "Student progress updated successfully" };
+  }
+} 
