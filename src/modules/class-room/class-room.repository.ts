@@ -3,6 +3,7 @@ import * as admin from "firebase-admin";
 import { Injectable } from "@nestjs/common";
 
 import { ClassRoomDto } from "./entities/class-room.entity";
+import { UpdateClassRoomDto } from "./dto/update-class-room-dto";
 
 @Injectable()
 export class ClassRoomRepository {
@@ -24,6 +25,18 @@ export class ClassRoomRepository {
       ...document.data(),
       id: document.id,
     };
+  }
+
+  public async update(classRoomId: string, updateClassRoomDto: UpdateClassRoomDto) {
+    const { ...fieldsToUpdate } = updateClassRoomDto;
+
+    if (!classRoomId) {
+      throw new Error("classRoomId is required for updating");
+    }
+
+    const classRoomRef = this.collection.doc(classRoomId);
+
+    await classRoomRef.update(fieldsToUpdate);
   }
 
   public async findById(id: string): Promise<ClassRoomDto | null> {

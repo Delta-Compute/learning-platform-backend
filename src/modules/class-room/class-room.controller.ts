@@ -9,10 +9,12 @@ import {
   Param,
   BadRequestException,
   Query,
+  Patch,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 
 import { CreateClassRoomDto } from "./dto/create-class-room-dto";
+import { UpdateClassRoomDto } from "./dto/update-class-room-dto";
 import { ClassRoomService } from "./class-room.service";
 
 import { ApiTags, ApiOperation } from "@nestjs/swagger";
@@ -64,5 +66,10 @@ export class ClassRoomController {
     }
   }
 
+  @ApiOperation({ summary: "Get all class rooms by teacherId" })
+  @Patch("/:id")
+  async updateClassRoom(@Param("id") classRoomId: string, @Body() updateClassRoomDto: UpdateClassRoomDto) {
+    return this.classRoomService.updateClassRoom(classRoomId, updateClassRoomDto);
+  }
   // update class room
 }

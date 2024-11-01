@@ -4,6 +4,7 @@ import { Injectable } from "@nestjs/common";
 
 import { ClassRoomDto } from "./entities/class-room.entity";
 import { CreateClassRoomDto } from "./dto/create-class-room-dto";
+import { UpdateClassRoomDto } from "./dto/update-class-room-dto";
 
 import { StorageService } from "../storage/storage.service";
 import { ClassRoomRepository } from "./class-room.repository";
@@ -42,5 +43,9 @@ export class ClassRoomService {
     const classRooms = await this.classRoomRepository.getAllByUserId(teacherId);
 
     return classRooms;
+  }
+
+  async updateClassRoom(classRoomId: string, updateClassRoomDto: UpdateClassRoomDto) {
+    return await this.classRoomRepository.update(classRoomId, updateClassRoomDto);
   }
 }

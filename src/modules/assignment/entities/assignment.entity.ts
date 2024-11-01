@@ -3,6 +3,7 @@ export class AssignmentDto {
   classRoomId: string;
   description: string;
   // deadline: Date;
+  // title:
   createdAt: number;
 
   public constructor(partial: Partial<AssignmentDto>) {
