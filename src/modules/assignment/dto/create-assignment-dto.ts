@@ -1,5 +1,5 @@
 import {
-  IsDate,
+  IsNumber,
   IsString,
 } from "class-validator";
 
@@ -9,6 +9,15 @@ export class CreateAssignmentDto {
 
   @IsString()
   description: string;
+
+  @IsString()
+  topic: string;
+
+  @IsString()
+  title: string;
+
+  @IsNumber()
+  createdAt: number;
 
   // @IsDate()
   // deadline: Date;

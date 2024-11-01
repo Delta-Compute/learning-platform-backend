@@ -1,13 +1,16 @@
 export class AssignmentDto {
   id?: string;
   classRoomId: string;
+  topic: string;
   description: string;
-  // deadline: Date;
-  // title:
+  title: string;
   createdAt: number;
+  // deadline: Date;
 
   public constructor(partial: Partial<AssignmentDto>) {
     this.id = partial?.id || "";
+    this.topic = partial?.topic || "";
+    this.title = partial?.title || "";
     this.description = partial.description || "";
     this.classRoomId = partial.classRoomId || "";
     this.createdAt =
