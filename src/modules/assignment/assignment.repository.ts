@@ -18,12 +18,16 @@ export class AssignmentRepository {
   private classRoomsProgressCollection: admin.firestore.CollectionReference<
     admin.firestore.DocumentData
   >;
+  private usersCollection: admin.firestore.CollectionReference<
+    admin.firestore.DocumentData
+  >;
 
   public constructor() {
     this.db = admin.firestore();
     this.assignmentCollection = this.db.collection("assignments");
     this.classRoomCollection = this.db.collection("class-rooms");
     this.classRoomsProgressCollection = this.db.collection("class-rooms-progress");
+    this.usersCollection = this.db.collection("users");
   }
 
   public async create(createAssignmentDto: AssignmentDto) {
@@ -48,17 +52,36 @@ export class AssignmentRepository {
       const studentsProgress = studentEmails.map(email => ({
         studentEmail: email,
         progress: false,
+        feedback: "",
       }));
-
-      // add name of user
-      // add user feedback
   
       const classRoomProgressRef = this.classRoomsProgressCollection.doc();
+
+      const usersQuerySnapshot = await this.usersCollection.get();
+      const usersData = usersQuerySnapshot.docs;
+
+      const studentsProgressData: { firstName: string, lastName: string, email: string, progress: boolean, feedback: string }[] = [];
+
+      for (const user of usersData) {
+        for (const student of studentsProgress) {
+          if (user.data().email === student.studentEmail) {
+            const studentProgress = {
+              firstName: user.data().firstName,
+              lastName: user.data().lastName,
+              email: user.data().email,
+              progress: student.progress,
+              feedback: student.feedback,
+            };
+
+            studentsProgressData.push(studentProgress);
+          }
+        }
+      }
       
       await classRoomProgressRef.set({
         assignmentId: reference.id,
         classRoomId: classRoomDoc.id,
-        studentsProgress,
+        studentsProgress: studentsProgressData,
       });
     }
 

@@ -7,17 +7,17 @@ import { Injectable } from "@nestjs/common";
 @Injectable()
 export class ClassRoomProgressRepository {
   private db: FirebaseFirestore.Firestore;
-  private collection: admin.firestore.CollectionReference<
+  private classRoomProgressCollection: admin.firestore.CollectionReference<
     admin.firestore.DocumentData
   >;
 
   public constructor() {
     this.db = admin.firestore();
-    this.collection = this.db.collection("class-rooms-progress");
+    this.classRoomProgressCollection = this.db.collection("class-rooms-progress");
   }
 
   public async findClassRoomProgress(classRoomId: string, assignmentId: string) {
-    const querySnapshot = await this.collection
+    const querySnapshot = await this.classRoomProgressCollection
       .where("classRoomId", "==", classRoomId)
       .where("assignmentId", "==", assignmentId)
       .limit(1) 
@@ -36,7 +36,7 @@ export class ClassRoomProgressRepository {
   }
 
   public async updateClassRoomProgress(classRoomId: string, assignmentId: string, studentEmail: string, feedback: string) {
-    const querySnapshot = await this.collection
+    const querySnapshot = await this.classRoomProgressCollection
       .where("classRoomId", "==", classRoomId)
       .where("assignmentId", "==", assignmentId)
       .limit(1) 
@@ -57,6 +57,7 @@ export class ClassRoomProgressRepository {
           feedback: feedback,
         };
       }
+
       return student;
     });
 
