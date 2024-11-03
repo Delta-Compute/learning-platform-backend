@@ -5,7 +5,7 @@ export class AssignmentDto {
   description: string;
   title: string;
   createdAt: number;
-  deadline: Date;
+  deadline: number;
 
   public constructor(partial: Partial<AssignmentDto>) {
     this.id = partial?.id || "";

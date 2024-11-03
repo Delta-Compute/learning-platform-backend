@@ -1,7 +1,6 @@
 import {
   IsNumber,
   IsString,
-  IsDate,
 } from "class-validator";
 
 export class CreateAssignmentDto {
@@ -20,6 +19,6 @@ export class CreateAssignmentDto {
   @IsNumber()
   createdAt: number;
 
-  @IsDate()
-  deadline: Date;
+  @IsNumber()
+  deadline: number;
 }
