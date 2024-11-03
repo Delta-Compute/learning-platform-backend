@@ -6,6 +6,7 @@ export class AssignmentDto {
   title: string;
   createdAt: number;
   deadline: number;
+  // students progress
 
   public constructor(partial: Partial<AssignmentDto>) {
     this.id = partial?.id || "";

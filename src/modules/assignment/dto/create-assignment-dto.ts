@@ -1,5 +1,6 @@
 import {
   IsNumber,
+  IsOptional,
   IsString,
 } from "class-validator";
 
@@ -16,8 +17,9 @@ export class CreateAssignmentDto {
   @IsString()
   title: string;
 
+  @IsOptional()
   @IsNumber()
-  createdAt: number;
+  createdAt?: number;
 
   @IsNumber()
   deadline: number;
