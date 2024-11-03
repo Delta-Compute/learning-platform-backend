@@ -29,6 +29,8 @@ export class ClassRoomProgressRepository {
 
     const classRoomProgressDoc = querySnapshot.docs[0];
 
+     // every time get users and create studentsProgress !!!!! 
+
     return {
       id: classRoomProgressDoc.id,
       ...classRoomProgressDoc.data(),
@@ -50,7 +52,7 @@ export class ClassRoomProgressRepository {
     const studentsProgress = classRoomProgressDoc.data().studentsProgress || [];
 
     const updatedStudentsProgress = studentsProgress.map((student) => {
-      if (student.studentEmail === studentEmail) {
+      if (student.email === studentEmail) {
         return {
           ...student,
           progress: true,        
