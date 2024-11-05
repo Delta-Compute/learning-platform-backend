@@ -5,6 +5,7 @@ import { NotFoundException } from "@nestjs/common";
 import { Injectable } from "@nestjs/common";
 
 import { AssignmentDto } from "./entities/assignment.entity";
+import { UpdateAssignmentDto } from "./dto/update-assignment-dto";
 
 @Injectable()
 export class AssignmentRepository {
@@ -148,5 +149,11 @@ export class AssignmentRepository {
     // return assignments where studentEmails contains this email
 
     return assignments;
+  }
+
+  public async updateAssignment(assignmentId: string, updateAssignmentDto: UpdateAssignmentDto) {
+    const assignmentRoomRef = this.assignmentCollection.doc(assignmentId);
+
+    await assignmentRoomRef.update({ ...updateAssignmentDto });
   }
 }

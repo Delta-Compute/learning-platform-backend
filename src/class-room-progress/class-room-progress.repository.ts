@@ -87,36 +87,37 @@ export class ClassRoomProgressRepository {
     return { message: "Student progress updated successfully" };
   }
 
-  public async findClassRoomStudentsProgress(classRoomId: string): Promise<string> {
+  public async findClassRoomStudentsProgress(classRoomId: string, assignmentId: string): Promise<string> {
     const querySnapshot = await this.classRoomProgressCollection
-      .where("classRoomId", "==", classRoomId).get();
+      .where("classRoomId", "==", classRoomId)
+      .where("assignmentId", "==", assignmentId)
+      .limit(1)
+      .get();
 
-    const studentsProgress = querySnapshot.docs;
-    const allAssignmentsProgress: StudentProgress[] = [];
+    const studentsProgress = querySnapshot.docs[0].data().studentsProgress;
+    const assignmentProgress: StudentProgress[] = [];
 
-    for (const progress of studentsProgress) {
-      const assignmentQuerySnapshot = await this.assignmentsCollection
-        .where(admin.firestore.FieldPath.documentId(), "==", progress.data().assignmentId).get();
+    const assignmentQuerySnapshot = await this.assignmentsCollection
+      .where(admin.firestore.FieldPath.documentId(), "==", assignmentId).get();
 
-      const assignment = assignmentQuerySnapshot.docs[0].data();
+    const assignment = assignmentQuerySnapshot.docs[0].data();
 
-      for (const student of progress.data().studentsProgress) {
-        const studentProgress = {
-          assignmentTitle: assignment.title,
-          assignmentTopic: assignment.topic,
-          assignmentDescription: assignment.description,
-          email: student.email,
-          firstName: student.firstName,
-          lastName: student.lastName,
-          progress: student.progress,
-          feedback: student.feedback,
-        }
-
-        allAssignmentsProgress.push(studentProgress);
+    for (const student of studentsProgress) {
+      const studentProgress = {
+        assignmentTitle: assignment.title,
+        assignmentTopic: assignment.topic,
+        assignmentDescription: assignment.description,
+        email: student.email,
+        firstName: student.firstName,
+        lastName: student.lastName,
+        progress: student.progress,
+        feedback: student.feedback,
       }
+
+      assignmentProgress.push(studentProgress);
     }
 
-    const classRoomProgress = allAssignmentsProgress.map((progress, index) => {
+    const classRoomProgress = assignmentProgress.map((progress, index) => {
       return `
         Student #${index + 1}
         Name: ${progress.firstName} ${progress.lastName}

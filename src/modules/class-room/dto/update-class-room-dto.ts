@@ -23,8 +23,4 @@ export class UpdateClassRoomDto {
   @IsOptional()
   @IsString()
   learningPlan?: string;
-
-  @IsOptional()
-  @IsString()
-  summary?: string;
 }

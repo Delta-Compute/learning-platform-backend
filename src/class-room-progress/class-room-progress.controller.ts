@@ -32,10 +32,11 @@ export class ClassRoomProgressController {
   }
 
   @ApiOperation({ summary: "Get class room students progress" })
-  @Get("/class-room-progress/students-progress/find-progress/:classRoomId")
+  @Get("/class-room-progress/students-progress/find-progress/:classRoomId/:assignmentId")
   public async getClassRoomStudentsProgress(
-    @Param("classRoomId") classRoomId: string, 
+    @Param("classRoomId") classRoomId: string,
+    @Param("assignmentId") assignmentId: string, 
   ) {
-    return this.classRoomProgressService.getClassRoomStudentsProgress(classRoomId);
+    return this.classRoomProgressService.getClassRoomStudentsProgress(classRoomId, assignmentId);
   }
 }

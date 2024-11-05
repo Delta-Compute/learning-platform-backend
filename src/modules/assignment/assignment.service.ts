@@ -4,6 +4,7 @@ import { AssignmentRepository } from "./assignment.repository";
 
 import { AssignmentDto } from "./entities/assignment.entity";
 import { CreateAssignmentDto } from "./dto/create-assignment-dto";
+import { UpdateAssignmentDto } from "./dto/update-assignment-dto";
 
 @Injectable()
 export class AssignmentService {
@@ -32,5 +33,9 @@ export class AssignmentService {
     const assignments = await this.assignmentRepository.findAssignmentsByStudentEmail(studentEmail);
     
     return assignments;
+  }
+
+  async updateAssignmentById(assignmentId: string, updateAssignmentDto: UpdateAssignmentDto) {
+    return await this.assignmentRepository.updateAssignment(assignmentId, updateAssignmentDto);
   }
 }

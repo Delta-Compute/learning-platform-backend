@@ -6,7 +6,6 @@ export class ClassRoomDto {
   studentEmails: string[];
   assignmentIds: string[];
   learningPlan: string;
-  summary: string;
   createdAt: number;
 
   public constructor(partial: Partial<ClassRoomDto>) {
@@ -17,7 +16,6 @@ export class ClassRoomDto {
     this.studentEmails = partial?.studentEmails || [];
     this.assignmentIds = partial?.assignmentIds || [];
     this.learningPlan = partial?.learningPlan || "";
-    this.summary = partial?.summary || "";
     this.createdAt =
       partial?.createdAt || new Date().getTime();
   }
