@@ -6,6 +6,7 @@ export class AssignmentDto {
   title: string;
   createdAt: number;
   deadline: number;
+  // studentEmails: string[];
   // students progress
 
   public constructor(partial: Partial<AssignmentDto>) {
@@ -15,6 +16,7 @@ export class AssignmentDto {
     this.description = partial.description || "";
     this.classRoomId = partial.classRoomId || "";
     this.deadline = partial?.deadline;
+    // this.studentEmails = partial?.studentEmails || [];
     this.createdAt =
       partial?.createdAt || new Date().getTime();
   }

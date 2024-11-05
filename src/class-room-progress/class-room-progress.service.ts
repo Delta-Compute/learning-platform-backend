@@ -13,4 +13,8 @@ export class ClassRoomProgressService {
   public async updateClassRoomProgress(classRoomId: string, assignmentId: string, studentEmail: string, feedback: string) {
     return this.classRoomProgressRepository.updateClassRoomProgress(classRoomId, assignmentId, studentEmail, feedback);
   }
+
+  public async getClassRoomStudentsProgress(classRoomId: string) {
+    return this.classRoomProgressRepository.findClassRoomStudentsProgress(classRoomId);
+  }
 }

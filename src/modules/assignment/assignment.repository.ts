@@ -48,6 +48,8 @@ export class AssignmentRepository {
     const classRoomData = classRoomDoc.data();
     const studentEmails = classRoomData?.studentEmails as string[];
 
+    // add array with user emails 
+
     if (studentEmails.length > 0) {
       const studentsProgress = studentEmails.map(email => ({
         studentEmail: email,
@@ -133,6 +135,7 @@ export class AssignmentRepository {
 
       for (const assignmentId of assignmentIds) {
         const assignmentDoc = await this.assignmentCollection.doc(assignmentId).get();
+
         if (assignmentDoc.exists) {
           assignments.push(new AssignmentDto({
             ...assignmentDoc.data(),
@@ -141,6 +144,8 @@ export class AssignmentRepository {
         }
       }
     }
+
+    // return assignments where studentEmails contains this email
 
     return assignments;
   }

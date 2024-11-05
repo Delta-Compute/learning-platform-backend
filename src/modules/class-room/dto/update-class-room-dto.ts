@@ -22,4 +22,7 @@ export class UpdateClassRoomDto {
   
   @IsString()
   learningPlan?: string;
+
+  @IsString()
+  summary?: string;
 }
