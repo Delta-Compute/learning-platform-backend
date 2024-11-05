@@ -20,9 +20,11 @@ export class UpdateClassRoomDto {
   @IsOptional()
   assignmentIds?: string[];
   
+  @IsOptional()
   @IsString()
   learningPlan?: string;
 
+  @IsOptional()
   @IsString()
   summary?: string;
 }
