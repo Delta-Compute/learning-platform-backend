@@ -7,6 +7,7 @@ export class AssignmentDto {
   createdAt: number;
   deadline: number;
   summary: string;
+  timeToDiscuss: number;
   // studentEmails: string[];
   // students progress
 
@@ -18,6 +19,7 @@ export class AssignmentDto {
     this.classRoomId = partial.classRoomId || "";
     this.deadline = partial?.deadline;
     this.summary = partial?.summary || "";
+    this.timeToDiscuss = partial?.timeToDiscuss || 0;
     // this.studentEmails = partial?.studentEmails || [];
     this.createdAt =
       partial?.createdAt || new Date().getTime();

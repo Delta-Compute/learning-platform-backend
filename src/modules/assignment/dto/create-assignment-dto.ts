@@ -23,4 +23,7 @@ export class CreateAssignmentDto {
 
   @IsNumber()
   deadline: number;
+
+  @IsNumber()
+  timeToDiscuss: number;
 }
