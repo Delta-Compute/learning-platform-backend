@@ -8,8 +8,8 @@ export class CreateUserDto {
   @IsString()
   id?: string;
 
-  // @IsString()
-  // school: string;
+  @IsString()
+  school: string;
 
   @IsOptional()
   @IsString()

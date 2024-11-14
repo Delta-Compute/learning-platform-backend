@@ -7,6 +7,7 @@ import { User } from "../../common/types/interfaces/user.interface";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { instanceToPlain } from "class-transformer";
+import { School } from "../auth/dto/auth-user-dto";
 
 @Injectable()
 export class UserRepository {
@@ -64,9 +65,10 @@ export class UserRepository {
     } as User;
   }
 
-  public async findUserByEmail(email: string): Promise<User> {
+  public async findUserByEmail(email: string, school: School): Promise<User> {
     const querySnapshot = await this.collection
     .where("email", "==", email)
+    .where("school", "==", school)
     .limit(1)
     .get();
 
@@ -78,6 +80,7 @@ export class UserRepository {
 
     return {
       id: document.id,
+      school: document.data().school,
       firstName: document.data().firstName,
       lastName: document.data().lastName,
       email: document.data().email,

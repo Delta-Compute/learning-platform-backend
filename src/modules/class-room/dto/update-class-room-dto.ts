@@ -23,4 +23,7 @@ export class UpdateClassRoomDto {
   @IsOptional()
   @IsString()
   learningPlan?: string;
+
+  @IsOptional()
+  file?: Express.Multer.File;
 }

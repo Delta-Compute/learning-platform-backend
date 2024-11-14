@@ -1,3 +1,5 @@
+import { School } from "src/modules/auth/dto/auth-user-dto";
+
 export interface User {
   id: string;
   firstName?: string;
@@ -7,4 +9,5 @@ export interface User {
   refreshToken: string;
   role?: string;
   password: string;
+  school: School;
 }

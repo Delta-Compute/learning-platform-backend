@@ -7,9 +7,19 @@ import {
 
 type UserRole = "student" | "teacher";
 
+export enum School {
+  MappleBear = "maple-bear",
+  AdeliaCosta = "adelia-costa",
+  SB = "sb",
+  Educare = "educare"
+};
+
 export class AuthUserDto {
   @IsOptional()
   role?: UserRole;
+
+  @IsString()
+  school: School;
 }
 
 export class SignInDto extends AuthUserDto {

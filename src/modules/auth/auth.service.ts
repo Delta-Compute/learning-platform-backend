@@ -20,9 +20,9 @@ export class AuthService {
   ) {}
 
   public async signUp(signUpDto: SignUpDto) {
-    const { email, password, role } = signUpDto;
+    const { email, password, school } = signUpDto;
 
-    const existingUser = await this.userService.findUserByEmail(email);
+    const existingUser = await this.userService.findUserByEmail(email, school); 
 
     if (existingUser) {
       throw new ConflictException("User with this email already exists");
@@ -32,6 +32,7 @@ export class AuthService {
 
     const newUser = await this.userService.createUser({
       email,
+      school,
       password: hashedPassword,
     });
 
@@ -51,9 +52,10 @@ export class AuthService {
   }
 
   public async signIn(signInDto: SignInDto) {
-    const { email, password } = signInDto;
+    const { email, password, school } = signInDto;
 
-    const user = await this.userService.findUserByEmail(email);
+    // and check school name
+    const user = await this.userService.findUserByEmail(email, school);
 
     if (!user) {
       throw new NotFoundException("User not found");

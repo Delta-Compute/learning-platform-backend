@@ -45,7 +45,11 @@ export class ClassRoomService {
     return classRooms;
   }
 
-  async updateClassRoom(classRoomId: string, updateClassRoomDto: UpdateClassRoomDto) {
+  async updateClassRoom(classRoomId: string, updateClassRoomDto: UpdateClassRoomDto, file?: Express.Multer.File) {
+    if (file) {
+      updateClassRoomDto.logo = await this.storageService.uploadImage(file);
+    }
+
     return await this.classRoomRepository.update(classRoomId, updateClassRoomDto);
   }
 }

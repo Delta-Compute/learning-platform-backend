@@ -28,6 +28,7 @@ export class ClassRoomRepository {
   }
 
   public async update(classRoomId: string, updateClassRoomDto: UpdateClassRoomDto) {
+    console.log(updateClassRoomDto);
     const { ...fieldsToUpdate } = updateClassRoomDto;
 
     if (!classRoomId) {

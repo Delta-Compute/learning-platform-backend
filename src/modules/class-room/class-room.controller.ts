@@ -68,8 +68,15 @@ export class ClassRoomController {
 
   @ApiOperation({ summary: "Get all class rooms by teacherId" })
   @Patch("/:id")
-  async updateClassRoom(@Param("id") classRoomId: string, @Body() updateClassRoomDto: UpdateClassRoomDto) {
-    return this.classRoomService.updateClassRoom(classRoomId, updateClassRoomDto);
+  @UseInterceptors(FileInterceptor("file", {}))
+  async updateClassRoom(
+    @Param("id") classRoomId: string, 
+    @Body() updateClassRoomDto: UpdateClassRoomDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return file ? 
+      this.classRoomService.updateClassRoom(classRoomId, updateClassRoomDto, file) :
+      this.classRoomService.updateClassRoom(classRoomId, updateClassRoomDto);
   }
   // update class room
 }
