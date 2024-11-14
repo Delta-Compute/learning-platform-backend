@@ -1,5 +1,3 @@
-import * as admin from "firebase-admin";
-
 import { Injectable } from "@nestjs/common";
 
 import { ClassRoomDto } from "./entities/class-room.entity";

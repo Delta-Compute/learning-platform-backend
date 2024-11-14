@@ -10,4 +10,6 @@ export interface User {
   role?: string;
   password: string;
   school: School;
+  natureLanguage?: string;
+  foreignLanguage?: string;
 }

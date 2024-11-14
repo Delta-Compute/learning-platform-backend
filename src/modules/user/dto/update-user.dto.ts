@@ -22,4 +22,12 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   @IsString()
   @IsOptional()
   role?: string;
+
+  @IsString()
+  @IsOptional()
+  natureLanguage?: string;
+
+  @IsString()
+  @IsOptional()
+  foreignLanguage?: string;
 }

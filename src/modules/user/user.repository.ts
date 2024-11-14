@@ -40,6 +40,8 @@ export class UserRepository {
           firstName: doc.data().firstName,
           lastName: doc.data().lastName,
           email: doc.data().email,
+          foreignLanguage: doc.data().foreignLanguage ?? "",
+          natureLanguage: doc.data().natureLanguage ?? "",
         }) as unknown as User,
     );
 
@@ -62,6 +64,8 @@ export class UserRepository {
       firstName: document.data().firstName ?? "",
       lastName: document.data().lastName ?? "",
       role: document.data().role ?? "",
+      foreignLanguage: document.data().foreignLanguage ?? "",
+      natureLanguage: document.data().natureLanguage ?? "",
     } as User;
   }
 
@@ -86,6 +90,8 @@ export class UserRepository {
       email: document.data().email,
       role: document.data().role,
       password: document.data().password,
+      foreignLanguage: document.data().foreignLanguage ?? "",
+      natureLanguage: document.data().natureLanguage ?? "",
     } as User;
   }
 
