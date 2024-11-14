@@ -11,7 +11,8 @@ export enum School {
   MappleBear = "maple-bear",
   AdeliaCosta = "adelia-costa",
   SB = "sb",
-  Educare = "educare"
+  Educare = "educare",
+  Beka = "beka"
 };
 
 export class AuthUserDto {
