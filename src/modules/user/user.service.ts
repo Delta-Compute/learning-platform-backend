@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 
 import { UserRepository } from "./user.repository";
-import { CreateUserDto } from "./dto/create-user.dto";
+import { AuthType, CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { School } from "../auth/dto/auth-user-dto";
 
@@ -13,8 +13,8 @@ export class UserService {
     return this.userRepository.create(createUserDto);
   }
 
-  public async findUserByEmail(email: string, school: School) {
-    return this.userRepository.findUserByEmail(email, school);
+  public async findUserByEmail(email: string, school: School, authType: AuthType) {
+    return this.userRepository.findUserByEmail(email, school, authType);
   }
 
   public async findUserById(id: string) {

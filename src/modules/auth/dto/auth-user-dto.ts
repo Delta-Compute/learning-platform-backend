@@ -5,6 +5,8 @@ import {
   IsEmail,
 } from "class-validator";
 
+import { AuthType } from "src/modules/user/dto/create-user.dto";
+
 type UserRole = "student" | "teacher";
 
 export enum School {
@@ -21,6 +23,9 @@ export class AuthUserDto {
 
   @IsString()
   school: School;
+
+  @IsString()
+  auth: AuthType;
 }
 
 export class SignInDto extends AuthUserDto {

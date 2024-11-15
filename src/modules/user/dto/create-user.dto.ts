@@ -4,6 +4,11 @@ import {
   IsEmail,
 } from "class-validator";
 
+export enum AuthType {
+  Email = "email",
+  Google = "google",
+};
+
 export class CreateUserDto {
   @IsString()
   id?: string;
@@ -29,4 +34,7 @@ export class CreateUserDto {
 
   @IsString()
   password: string;
+
+  @IsString()
+  auth: AuthType;
 }

@@ -4,7 +4,7 @@ import { Injectable } from "@nestjs/common";
 
 import { User } from "../../common/types/interfaces/user.interface";
 
-import { CreateUserDto } from "./dto/create-user.dto";
+import { AuthType, CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { instanceToPlain } from "class-transformer";
 import { School } from "../auth/dto/auth-user-dto";
@@ -42,6 +42,7 @@ export class UserRepository {
           email: doc.data().email,
           foreignLanguage: doc.data().foreignLanguage ?? "",
           natureLanguage: doc.data().natureLanguage ?? "",
+          auth: doc.data().auth,
         }) as unknown as User,
     );
 
@@ -66,13 +67,15 @@ export class UserRepository {
       role: document.data().role ?? "",
       foreignLanguage: document.data().foreignLanguage ?? "",
       natureLanguage: document.data().natureLanguage ?? "",
+      school: document.data().school,
     } as User;
   }
 
-  public async findUserByEmail(email: string, school: School): Promise<User> {
+  public async findUserByEmail(email: string, school: School, authType: AuthType): Promise<User> {
     const querySnapshot = await this.collection
     .where("email", "==", email)
     .where("school", "==", school)
+    .where("auth", "==", authType)
     .limit(1)
     .get();
 
