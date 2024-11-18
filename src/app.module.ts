@@ -13,6 +13,7 @@ import { UserModule } from "./modules/user/user.module";
 import { ClassRoomModule } from "./modules/class-room/class-room.module"; 
 import { AssignmentModule } from "./modules/assignment/assignment.module";
 import { ClassRoomProgressModule } from "./modules/class-room-progress/class-room-progress.module";
+import { GoogleSchoolSearchModule } from "./modules/google-school-search/google-school-search.module";
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ClassRoomProgressModule } from "./modules/class-room-progress/class-roo
     ClassRoomModule,
     AssignmentModule,
     ClassRoomProgressModule,
+    GoogleSchoolSearchModule,
   ],
   controllers: [AppController],
   providers: [AppService],

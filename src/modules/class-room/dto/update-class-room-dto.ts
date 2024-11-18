@@ -25,5 +25,9 @@ export class UpdateClassRoomDto {
   learningPlan?: string;
 
   @IsOptional()
+  @IsString()
+  subject?: string;
+
+  @IsOptional()
   file?: Express.Multer.File;
 }

@@ -14,6 +14,9 @@ export class CreateClassRoomDto {
   @IsOptional()
   logo?: string;
 
+  @IsString()
+  subject: string;
+
   @IsOptional()
   file?: Express.Multer.File;
 }
