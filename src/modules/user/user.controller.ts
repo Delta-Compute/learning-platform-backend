@@ -5,6 +5,7 @@ import {
   Controller, 
   Patch, 
   Query,
+  BadRequestException,
 } from "@nestjs/common";
 
 import { UpdateUserDto } from "./dto/update-user.dto";
@@ -31,7 +32,13 @@ export class UserController {
 
   @ApiOperation({ summary: "Get users by emails" })
   @Get("/users/find-users/find-all")
-  public async findUsersByEmailsList(@Query("email") emails: string[]) {
-    return this.userService.findUserByEmailsList(emails);
+  public async findUsersByEmailsList(@Query("email") emails: string | string[]) {
+    const emailsList = Array.isArray(emails) ? emails : [emails];
+
+    if (emailsList.length === 0) {
+      throw new BadRequestException("No emails provided");
+    }
+
+    return this.userService.findUserByEmailsList(emailsList);
   }
 }
