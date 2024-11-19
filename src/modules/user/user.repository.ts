@@ -118,4 +118,18 @@ export class UserRepository {
 
     await document.delete();
   }
+
+  public async getAllByEmails(emails: string[]): Promise<User[]> {
+    const reference = await this.collection
+      .where("email", "in", emails)
+      .get();
+    
+
+    const users = reference.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+    return users as User[];
+  }
 }

@@ -44,4 +44,8 @@ export class UserService {
 
     return this.userRepository.deleteById(id);
   }
+
+  public async findUserByEmailsList(emails: string[]) {
+    return this.userRepository.getAllByEmails(emails);
+  }
 }

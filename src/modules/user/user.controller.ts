@@ -1,4 +1,11 @@
-import { Get, Body, Param, Controller, Patch } from "@nestjs/common";
+import { 
+  Get, 
+  Body, 
+  Param, 
+  Controller, 
+  Patch, 
+  Query,
+} from "@nestjs/common";
 
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { UserService } from "./user.service";
@@ -20,5 +27,11 @@ export class UserController {
   @Get("/users/:id")
   public async getById(@Param("id") id: string) {
     return this.userService.findUserById(id);
+  }
+
+  @ApiOperation({ summary: "Get users by emails" })
+  @Get("/users/find-users/find-all")
+  public async findUsersByEmailsList(@Query("email") emails: string[]) {
+    return this.userService.findUserByEmailsList(emails);
   }
 }
