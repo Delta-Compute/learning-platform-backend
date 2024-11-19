@@ -5,6 +5,8 @@ import { Injectable } from "@nestjs/common";
 import { ClassRoomDto } from "./entities/class-room.entity";
 import { UpdateClassRoomDto } from "./dto/update-class-room-dto";
 
+import { v4 as uuid } from "uuid";
+
 @Injectable()
 export class ClassRoomRepository {
   private db: FirebaseFirestore.Firestore;
@@ -18,7 +20,10 @@ export class ClassRoomRepository {
   }
 
   public async create(createClassDto: ClassRoomDto) {
-    const reference = await this.collection.add(createClassDto.toPlainObject());
+    const reference = await this.collection.add({
+      ...createClassDto.toPlainObject(),
+      verificationCode: uuid(),
+    });
     const document = await reference.get();
 
     return {
@@ -28,7 +33,6 @@ export class ClassRoomRepository {
   }
 
   public async update(classRoomId: string, updateClassRoomDto: UpdateClassRoomDto) {
-    console.log(updateClassRoomDto);
     const { ...fieldsToUpdate } = updateClassRoomDto;
 
     if (!classRoomId) {
@@ -63,7 +67,7 @@ export class ClassRoomRepository {
   
     try {
       const snapshot = await this.collection
-        .where('teacherId', '==', userId)
+        .where("teacherId", "==", userId)
         .get();
   
       if (snapshot.empty) {
@@ -81,6 +85,30 @@ export class ClassRoomRepository {
     } catch (error) {
       console.error("Error fetching classrooms by user ID:", error);
       throw new Error("Failed to fetch classrooms by user ID");
+    }
+  }
+
+  public async addStudentEmail(verificationCode: string, email: string) {
+    // TODO add condition for school type
+    const document = await this.collection
+      .where("verificationCode", "==", verificationCode)
+      .limit(1)
+      .get();
+    
+    if (document.docs.length === 0) {
+      throw new Error("Wrong verification code");
+    } 
+
+    const classRoom = document.docs[0].data();
+    const classRoomId = document.docs[0].id;
+
+    if (classRoom.studentEmails.includes(email)) {
+      throw new Error("This email already added");
+    } else {
+      const studentEmails = [...classRoom.studentEmails];
+      studentEmails.push(email);
+
+      this.update(classRoomId, { studentEmails });
     }
   }
 } 

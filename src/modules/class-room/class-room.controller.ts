@@ -78,5 +78,13 @@ export class ClassRoomController {
       this.classRoomService.updateClassRoom(classRoomId, updateClassRoomDto, file) :
       this.classRoomService.updateClassRoom(classRoomId, updateClassRoomDto);
   }
-  // update class room
+  
+  @ApiOperation({ summary: "Update class room student emails" })
+  @Patch("/verification-code/:verificationCode/:studentEmail")
+  async addNewStudentEmailClassRoom(
+    @Param("verificationCode") verificationCode: string,
+    @Param("studentEmail") studentEmail: string, 
+  ) {
+    return await this.classRoomService.addNewStudentToClassRoom(verificationCode, studentEmail);
+  }
 }

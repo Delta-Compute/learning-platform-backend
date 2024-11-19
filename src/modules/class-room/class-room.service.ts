@@ -50,4 +50,8 @@ export class ClassRoomService {
 
     return await this.classRoomRepository.update(classRoomId, updateClassRoomDto);
   }
+
+  async addNewStudentToClassRoom(verificationCode: string, studentEmail: string) {
+    return await this.classRoomRepository.addStudentEmail(verificationCode, studentEmail);
+  }
 }

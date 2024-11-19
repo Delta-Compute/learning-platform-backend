@@ -1,6 +1,7 @@
 import {
   IsString,
   IsOptional,
+  IsArray,
 } from "class-validator";
 
 export class CreateClassRoomDto {
@@ -16,6 +17,10 @@ export class CreateClassRoomDto {
 
   @IsString()
   subject: string;
+
+  @IsArray()
+  @IsOptional()
+  studentEmails?: string[];
 
   @IsOptional()
   file?: Express.Multer.File;
