@@ -13,3 +13,11 @@ export interface User {
   natureLanguage?: string;
   foreignLanguage?: string;
 }
+
+export interface UserInfo {
+  email: string;
+  role: "teacher" | "student";
+  firstName: string;
+  lastName: string;
+  school: School;
+}

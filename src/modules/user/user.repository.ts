@@ -2,12 +2,13 @@ import * as admin from "firebase-admin";
 
 import { Injectable } from "@nestjs/common";
 
-import { User } from "../../common/types/interfaces/user.interface";
+import { User, UserInfo } from "../../common/types/interfaces/user.interface";
 
 import { AuthType, CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { instanceToPlain } from "class-transformer";
 import { School } from "../auth/dto/auth-user-dto";
+
 
 @Injectable()
 export class UserRepository {
@@ -119,17 +120,19 @@ export class UserRepository {
     await document.delete();
   }
 
-  public async getAllByEmails(emails: string[]): Promise<User[]> {
+  public async getAllByEmails(emails: string[]): Promise<UserInfo[]> {
     const reference = await this.collection
       .where("email", "in", emails)
       .get();
-    
 
     const users = reference.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
+      firstName: doc.data().firstName,
+      lastName: doc.data().lastName,
+      email: doc.data().email,
+      role: doc.data().role,
+      school: doc.data().school,
     }));
 
-    return users as User[];
+    return users as UserInfo[];
   }
 }
