@@ -4,7 +4,6 @@ import {
   Get,
   UseInterceptors,
   Body,
-  // Req,
   UploadedFile,
   Param,
   BadRequestException,
@@ -17,7 +16,7 @@ import { CreateClassRoomDto } from "./dto/create-class-room-dto";
 import { UpdateClassRoomDto } from "./dto/update-class-room-dto";
 import { ClassRoomService } from "./class-room.service";
 
-import { ApiTags, ApiOperation } from "@nestjs/swagger";
+import { ApiTags, ApiOperation, ApiQuery } from "@nestjs/swagger";
 
 @ApiTags("Class Room")
 @Controller("class-room")
@@ -64,6 +63,36 @@ export class ClassRoomController {
       console.error("Error fetching classrooms:", error);
       throw new BadRequestException("Failed to fetch classrooms");
     }
+  }
+
+  @ApiOperation({ summary: "Get class room report info" })
+  @Get("/report/:classRoomId")
+  @ApiQuery({
+    name: "students",
+    type: String,
+    isArray: true,
+    description: "List of student IDs or user info",
+    required: true,
+  })
+  @ApiQuery({
+    name: "from",
+    type: Number,
+    description: "Start of range",
+    required: true,
+  })
+  @ApiQuery({
+    name: "to",
+    type: Number,
+    description: "End of range",
+    required: true,
+  })
+  async getClassRoomReport(
+    @Param("classRoomId") classRoomId: string,
+    @Query("students") studentEmails: string[],
+    @Query("from") from: number,
+    @Query("to") to: number,
+  ) {
+    return await this.classRoomService.getClassRoomReport(classRoomId, studentEmails, { from, to });
   }
 
   @ApiOperation({ summary: "Get all class rooms by teacherId" })

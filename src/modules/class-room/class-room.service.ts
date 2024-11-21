@@ -54,4 +54,12 @@ export class ClassRoomService {
   async addNewStudentToClassRoom(verificationCode: string, studentEmail: string) {
     return await this.classRoomRepository.addStudentEmail(verificationCode, studentEmail);
   }
+
+  async getClassRoomReport(
+    classRoomId: string, 
+    studentEmails: string[], 
+    rage: { from: number, to: number },
+  ) {
+    return await this.classRoomRepository.getClassRoomReport(classRoomId, studentEmails, rage);
+  }
 }

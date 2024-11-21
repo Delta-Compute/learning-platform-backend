@@ -5,6 +5,7 @@ import { AssignmentRepository } from "./assignment.repository";
 import { AssignmentDto } from "./entities/assignment.entity";
 import { CreateAssignmentDto } from "./dto/create-assignment-dto";
 import { UpdateAssignmentDto } from "./dto/update-assignment-dto";
+import { School } from "../auth/dto/auth-user-dto";
 
 @Injectable()
 export class AssignmentService {
@@ -12,12 +13,13 @@ export class AssignmentService {
     public readonly assignmentRepository: AssignmentRepository,
   ) {}
 
-  async createAssignment(createAssignmentDto: CreateAssignmentDto) {
+  async createAssignment(createAssignmentDto: CreateAssignmentDto, school: School) {
     const classRoom = await this.assignmentRepository.create(
       new AssignmentDto({
         ...createAssignmentDto,
         createdAt: new Date().getTime(),
       }),
+      school,
     );
 
     return classRoom;

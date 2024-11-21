@@ -44,7 +44,7 @@ export class ClassRoomProgressRepository {
 
     const classRoomProgressDoc = querySnapshot.docs[0];
 
-    // every time get users and create studentsProgress !!!!! 
+    // TODO every time get users and create studentsProgress !!!!! 
 
     return {
       id: classRoomProgressDoc.id,
@@ -66,7 +66,7 @@ export class ClassRoomProgressRepository {
     const classRoomProgressDoc = querySnapshot.docs[0];
     const studentsProgress = classRoomProgressDoc.data().studentsProgress || [];
 
-    // delete studentEmail from studentEmails field in assignments collection
+    // TODO delete studentEmail from studentEmails field in assignments collection
 
     const updatedStudentsProgress = studentsProgress.map((student) => {
       if (student.email === studentEmail) {

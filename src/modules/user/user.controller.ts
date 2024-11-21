@@ -11,7 +11,8 @@ import {
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { UserService } from "./user.service";
 
-import { ApiTags, ApiOperation } from "@nestjs/swagger";
+import { ApiTags, ApiOperation, ApiQuery } from "@nestjs/swagger";
+import { School } from "../auth/dto/auth-user-dto";
 
 @ApiTags("Users")
 @Controller()
@@ -31,14 +32,24 @@ export class UserController {
   }
 
   @ApiOperation({ summary: "Get users by emails" })
-  @Get("/users/find-users/find-all")
-  public async findUsersByEmailsList(@Query("email") emails: string | string[]) {
+  @ApiQuery({
+    name: "email",
+    type: String,
+    isArray: true,
+    description: "List of email addresses",
+    required: true,
+  })
+  @Get("/users/find-users/find-all/:school")
+  public async findUsersByEmailsList(
+    @Param("school") school: School,
+    @Query("email") emails: string | string[],
+  ) {
     const emailsList = Array.isArray(emails) ? emails : [emails];
 
     if (emailsList.length === 0) {
       throw new BadRequestException("No emails provided");
     }
 
-    return this.userService.findUserByEmailsList(emailsList);
+    return this.userService.findUserByEmailsList(emailsList, school);
   }
 }

@@ -1,5 +1,10 @@
 import { School } from "src/modules/auth/dto/auth-user-dto";
 
+export enum UserRole {
+  Teacher = "teacher",
+  Student = "student",
+}
+
 export interface User {
   id: string;
   firstName?: string;
@@ -7,7 +12,7 @@ export interface User {
   phone: string;
   email: string;
   refreshToken: string;
-  role?: string;
+  role?: UserRole;
   password: string;
   school: School;
   natureLanguage?: string;
@@ -15,8 +20,9 @@ export interface User {
 }
 
 export interface UserInfo {
+  id: string;
   email: string;
-  role: "teacher" | "student";
+  role: UserRole;
   firstName: string;
   lastName: string;
   school: School;

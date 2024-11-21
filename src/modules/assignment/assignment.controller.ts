@@ -7,6 +7,7 @@ import { CreateAssignmentDto } from "./dto/create-assignment-dto";
 import { UpdateAssignmentDto } from "./dto/update-assignment-dto";
 
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
+import { School } from "../auth/dto/auth-user-dto";
 
 @ApiTags("Assignment")
 @Controller()
@@ -14,9 +15,12 @@ export class AssignmentController {
   public constructor(private readonly assignmentService: AssignmentService) {}
 
   @ApiOperation({ summary: "Create an assignment" })
-  @Post("/assignments")
-  public async createAssignment(@Body() createAssignmentDto: CreateAssignmentDto) {
-    return this.assignmentService.createAssignment(createAssignmentDto);
+  @Post("/assignments/:school")
+  public async createAssignment(
+    @Param("school") school: School,
+    @Body() createAssignmentDto: CreateAssignmentDto,
+  ) {
+    return this.assignmentService.createAssignment(createAssignmentDto, school);
   }
 
   @ApiOperation({ summary: "Get class room assignments" })

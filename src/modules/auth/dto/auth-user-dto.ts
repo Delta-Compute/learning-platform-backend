@@ -1,5 +1,4 @@
 import {
-  IsNotEmpty,
   IsString,
   IsOptional,
   IsEmail,
@@ -14,7 +13,8 @@ export enum School {
   AdeliaCosta = "adelia-costa",
   SB = "sb",
   Educare = "educare",
-  Beka = "beka"
+  Beka = "beka",
+  Cincinatti = "cincinatti"
 };
 
 export class AuthUserDto {

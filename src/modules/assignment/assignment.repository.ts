@@ -6,6 +6,7 @@ import { Injectable } from "@nestjs/common";
 
 import { AssignmentDto } from "./entities/assignment.entity";
 import { UpdateAssignmentDto } from "./dto/update-assignment-dto";
+import { School } from "../auth/dto/auth-user-dto";
 
 @Injectable()
 export class AssignmentRepository {
@@ -31,7 +32,7 @@ export class AssignmentRepository {
     this.usersCollection = this.db.collection("users");
   }
 
-  public async create(createAssignmentDto: AssignmentDto) {
+  public async create(createAssignmentDto: AssignmentDto, school: School) {
     const reference = await this.assignmentCollection.add(createAssignmentDto.toPlainObject());
     const document = await reference.get();
 
@@ -67,7 +68,7 @@ export class AssignmentRepository {
 
       for (const user of usersData) {
         for (const student of studentsProgress) {
-          if (user.data().email === student.studentEmail) {
+          if (user.data().email === student.studentEmail && user.data().school === school) {
             const studentProgress = {
               firstName: user.data().firstName,
               lastName: user.data().lastName,

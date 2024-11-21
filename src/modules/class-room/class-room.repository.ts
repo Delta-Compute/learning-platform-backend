@@ -7,20 +7,30 @@ import { UpdateClassRoomDto } from "./dto/update-class-room-dto";
 
 import { v4 as uuid } from "uuid";
 
+import { Report } from "src/common/types/interfaces/report.interface";
+
 @Injectable()
 export class ClassRoomRepository {
   private db: FirebaseFirestore.Firestore;
-  private collection: admin.firestore.CollectionReference<
+  private classRoomCollection: admin.firestore.CollectionReference<
+    admin.firestore.DocumentData
+  >;
+  private assignmentsCollection: admin.firestore.CollectionReference<
+    admin.firestore.DocumentData
+  >;
+  private classRoomsProgressCollection: admin.firestore.CollectionReference<
     admin.firestore.DocumentData
   >;
 
   public constructor() {
     this.db = admin.firestore();
-    this.collection = this.db.collection("class-rooms");
+    this.classRoomCollection = this.db.collection("class-rooms");
+    this.assignmentsCollection = this.db.collection("assignments");
+    this.classRoomsProgressCollection = this.db.collection("class-rooms-progress");
   }
 
   public async create(createClassDto: ClassRoomDto) {
-    const reference = await this.collection.add({
+    const reference = await this.classRoomCollection.add({
       ...createClassDto.toPlainObject(),
       verificationCode: uuid(),
     });
@@ -39,13 +49,13 @@ export class ClassRoomRepository {
       throw new Error("classRoomId is required for updating");
     }
 
-    const classRoomRef = this.collection.doc(classRoomId);
+    const classRoomRef = this.classRoomCollection.doc(classRoomId);
 
     await classRoomRef.update(fieldsToUpdate);
   }
 
   public async findById(id: string): Promise<ClassRoomDto | null> {
-    const reference = this.collection.doc(id);
+    const reference = this.classRoomCollection.doc(id);
     const document = await reference.get();
 
     if (!document.exists) {
@@ -66,7 +76,7 @@ export class ClassRoomRepository {
     }
   
     try {
-      const snapshot = await this.collection
+      const snapshot = await this.classRoomCollection
         .where("teacherId", "==", userId)
         .get();
   
@@ -90,7 +100,7 @@ export class ClassRoomRepository {
 
   public async addStudentEmail(verificationCode: string, email: string) {
     // TODO add condition for school type
-    const document = await this.collection
+    const document = await this.classRoomCollection
       .where("verificationCode", "==", verificationCode)
       .limit(1)
       .get();
@@ -110,5 +120,80 @@ export class ClassRoomRepository {
 
       this.update(classRoomId, { studentEmails });
     }
+  }
+
+  public async getClassRoomReport(
+    classRoomId: string, 
+    studentEmails: string[], 
+    rage: { from: number, to: number },
+  ): Promise<Report[]> {
+    const classRoomsProgressDocument = await this.classRoomsProgressCollection
+      .where("classRoomId", "==", classRoomId)
+      .get();
+
+    const assignmentIds: string[] = [];
+
+
+    for (const classRoomProgress of classRoomsProgressDocument.docs) {
+      assignmentIds.push(classRoomProgress.data().assignmentId);
+    }
+
+    if (assignmentIds.length === 0) {
+      return []; 
+    }
+
+    const assignmentsDocument = await this.assignmentsCollection
+      .where(admin.firestore.FieldPath.documentId(), "in", assignmentIds)
+      .get();
+
+    const assignmentsInRange = [];
+
+    for (const assignment of assignmentsDocument.docs) {
+      const createdAt = assignment.data().createdAt; 
+
+      if (createdAt >= rage.from && createdAt <= rage.to) {
+        assignmentsInRange.push({ assignmentId: assignment.id, ...assignment.data() });
+      }
+    }
+
+    const assignmentIdsInRange = assignmentsInRange.map(item => item.assignmentId);
+
+    const reports = [];
+
+    for (const classRoomProgress of classRoomsProgressDocument.docs) {
+      const assignmentId = classRoomProgress.data().assignmentId;
+
+      if (!assignmentIdsInRange.includes(assignmentId)) {
+        continue;
+      }
+
+      const assignmentData = assignmentsInRange.find(a => a.assignmentId === assignmentId);
+
+      for (const studentProgressItem of classRoomProgress.data().studentsProgress) {
+        if (!studentEmails.includes(studentProgressItem.email)) {
+          continue;
+        }
+
+        let report = reports.find(r => r.studentEmail === studentProgressItem.email);
+
+        if (!report) {
+          report = {
+            studentName: `${studentProgressItem.firstName} ${studentProgressItem.lastName}`,
+            studentEmail: studentProgressItem.email,
+            completedAssignments: [],
+            inCompletedAssignments: [],
+          };
+          reports.push(report);
+        }
+
+        if (studentProgressItem.progress === true) {
+          report.completedAssignments.push(assignmentData);
+        } else {
+          report.inCompletedAssignments.push(assignmentData);
+        }
+      }
+    }
+
+    return reports;
   }
 } 
