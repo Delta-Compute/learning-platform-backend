@@ -9,6 +9,7 @@ interface Assignment {
   timeToDiscuss: number;
   createdAt: number;
   summary: string;
+  feedback: string;
 };
 
 export interface Report {

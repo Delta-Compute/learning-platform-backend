@@ -1,3 +1,5 @@
+import { School } from "./../../auth/dto/auth-user-dto";
+
 export class ClassRoomDto {
   id?: string;
   name: string;
@@ -9,6 +11,7 @@ export class ClassRoomDto {
   subject: string;
   verificationCode: string;
   createdAt: number;
+  school: School;
 
   public constructor(partial: Partial<ClassRoomDto>) {
     this.id = partial?.id || "";
@@ -20,6 +23,7 @@ export class ClassRoomDto {
     this.learningPlan = partial?.learningPlan || "";
     this.subject = partial?.subject || "";
     this.verificationCode = partial?.verificationCode || "";
+    this.school = partial?.school || School.MapleBear;
     this.createdAt =
       partial?.createdAt || new Date().getTime();
   }

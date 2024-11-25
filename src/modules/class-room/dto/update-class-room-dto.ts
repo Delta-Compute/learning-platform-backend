@@ -1,3 +1,4 @@
+import { School } from './../../auth/dto/auth-user-dto';
 import {
   IsString,
   IsOptional,
@@ -30,4 +31,8 @@ export class UpdateClassRoomDto {
 
   @IsOptional()
   file?: Express.Multer.File;
+
+  @IsString()
+  @IsOptional()
+  school?: School;
 }

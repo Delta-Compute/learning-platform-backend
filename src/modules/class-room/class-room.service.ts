@@ -6,6 +6,7 @@ import { UpdateClassRoomDto } from "./dto/update-class-room-dto";
 
 import { StorageService } from "../storage/storage.service";
 import { ClassRoomRepository } from "./class-room.repository";
+import { School } from "../auth/dto/auth-user-dto";
 
 @Injectable()
 export class ClassRoomService {
@@ -61,5 +62,9 @@ export class ClassRoomService {
     rage: { from: number, to: number },
   ) {
     return await this.classRoomRepository.getClassRoomReport(classRoomId, studentEmails, rage);
+  }
+
+  async findClassRoomForStudentByEmail(email: string, school: School) {
+    return await this.classRoomRepository.findForStudent(email, school);
   }
 }

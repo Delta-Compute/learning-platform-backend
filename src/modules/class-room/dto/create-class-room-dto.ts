@@ -4,6 +4,8 @@ import {
   IsArray,
 } from "class-validator";
 
+import { School } from "src/modules/auth/dto/auth-user-dto";
+
 export class CreateClassRoomDto {
   @IsString()
   name: string;
@@ -24,4 +26,7 @@ export class CreateClassRoomDto {
 
   @IsOptional()
   file?: Express.Multer.File;
+
+  @IsString()
+  school: School;
 }

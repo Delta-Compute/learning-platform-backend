@@ -205,7 +205,15 @@ export class ClassRoomRepository {
   }
 
   public async findForStudent(email: string, school: School): Promise<ClassRoomDto | null> {
-    const document = await this.classRoomCollection.get();
+    const document = await this.classRoomCollection
+      .where("school", "==", school)
+      .get();
+    
+    const schools = Object.values(School);  
+
+    if (!schools.includes(school)) {
+      return null;
+    }
 
     for (const classRoom of document.docs) {
       if (classRoom.data().studentEmails.includes(email)) {

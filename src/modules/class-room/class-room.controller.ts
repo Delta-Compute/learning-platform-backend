@@ -123,6 +123,6 @@ export class ClassRoomController {
     @Param("email") email: string,
     @Param("school") school: School,
   ) {
-    return { email, school };
+    return await this.classRoomService.findClassRoomForStudentByEmail(email, school);
   }
 }
