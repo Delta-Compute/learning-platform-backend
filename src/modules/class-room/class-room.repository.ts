@@ -8,6 +8,7 @@ import { UpdateClassRoomDto } from "./dto/update-class-room-dto";
 import { v4 as uuid } from "uuid";
 
 import { Report } from "src/common/types/interfaces/report.interface";
+import { School } from "../auth/dto/auth-user-dto";
 
 @Injectable()
 export class ClassRoomRepository {
@@ -133,7 +134,6 @@ export class ClassRoomRepository {
 
     const assignmentIds: string[] = [];
 
-
     for (const classRoomProgress of classRoomsProgressDocument.docs) {
       assignmentIds.push(classRoomProgress.data().assignmentId);
     }
@@ -147,6 +147,8 @@ export class ClassRoomRepository {
       .get();
 
     const assignmentsInRange = [];
+
+    console.log(assignmentsDocument);
 
     for (const assignment of assignmentsDocument.docs) {
       const createdAt = assignment.data().createdAt; 
@@ -186,14 +188,31 @@ export class ClassRoomRepository {
           reports.push(report);
         }
 
+        const assignmentWithFeedback = {
+          ...assignmentData,
+          feedback: studentProgressItem.feedback || "",
+        };
+
         if (studentProgressItem.progress === true) {
-          report.completedAssignments.push(assignmentData);
+          report.completedAssignments.push(assignmentWithFeedback);
         } else {
-          report.inCompletedAssignments.push(assignmentData);
+          report.inCompletedAssignments.push(assignmentWithFeedback);
         }
       }
     }
 
     return reports;
   }
+
+  public async findForStudent(email: string, school: School): Promise<ClassRoomDto | null> {
+    const document = await this.classRoomCollection.get();
+
+    for (const classRoom of document.docs) {
+      if (classRoom.data().studentEmails.includes(email)) {
+        return new ClassRoomDto({ id: classRoom.id, ...classRoom.data() });
+      }
+    }
+
+    return null;
+  } 
 } 

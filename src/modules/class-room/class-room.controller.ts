@@ -17,6 +17,7 @@ import { UpdateClassRoomDto } from "./dto/update-class-room-dto";
 import { ClassRoomService } from "./class-room.service";
 
 import { ApiTags, ApiOperation, ApiQuery } from "@nestjs/swagger";
+import { School } from "../auth/dto/auth-user-dto";
 
 @ApiTags("Class Room")
 @Controller("class-room")
@@ -71,7 +72,7 @@ export class ClassRoomController {
     name: "students",
     type: String,
     isArray: true,
-    description: "List of student IDs or user info",
+    description: "List of student Ids or user info",
     required: true,
   })
   @ApiQuery({
@@ -115,5 +116,13 @@ export class ClassRoomController {
     @Param("studentEmail") studentEmail: string, 
   ) {
     return await this.classRoomService.addNewStudentToClassRoom(verificationCode, studentEmail);
+  }
+
+  @Get("/find-class-room/for-student/:email/:school")
+  async findClassRoomForStudentByEmail(
+    @Param("email") email: string,
+    @Param("school") school: School,
+  ) {
+    return { email, school };
   }
 }
