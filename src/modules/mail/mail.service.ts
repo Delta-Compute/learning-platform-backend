@@ -21,13 +21,13 @@ export class MailService {
     });
   }
 
-  async sendFile(to: string, subject: string, text: string, file: Express.Multer.File): Promise<void> {
+  async sendFile(to: string, name: string, file: Express.Multer.File): Promise<void> {
     try {
       const mailOptions = {
         from: "Teachers aid",
         to,
-        subject,
-        text: "From teachers AI-d",
+        subject: "Report from Teachers AI-d",
+        text: `Dear ${name} Attached is your Teachers AI-d usage report. Best Regards`,
         attachments: [
           {
             filename: file.originalname,

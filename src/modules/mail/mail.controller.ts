@@ -5,6 +5,8 @@ import { MailService } from "./mail.service";
 
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 
+import { SendMailDto } from "./dto/send-mail-dto";
+
 @ApiTags("Report mail")
 @Controller("mail")
 export class MailController {
@@ -15,8 +17,8 @@ export class MailController {
   @Post("send")
   async sendFile(
     @UploadedFile() file: Express.Multer.File,
-    @Body("email") email: string,
+    @Body() sendMailDto: SendMailDto,
   ) {
-    await this.mailService.sendFile(email, "", "", file);
+    await this.mailService.sendFile(sendMailDto.email,  sendMailDto.name, file);
   }
 }
