@@ -9,6 +9,7 @@ import { AuthType } from "src/modules/user/dto/create-user.dto";
 type UserRole = "student" | "teacher";
 
 export enum School {
+  Default = "def",
   MapleBear = "maple-bear",
   AdeliaCosta = "adelia-costa",
   SB = "sb",

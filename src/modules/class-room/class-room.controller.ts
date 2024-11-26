@@ -118,6 +118,7 @@ export class ClassRoomController {
     return await this.classRoomService.addNewStudentToClassRoom(verificationCode, studentEmail);
   }
 
+  @ApiOperation({ summary: "Find class room for student" })
   @Get("/find-class-room/for-student/:email/:school")
   async findClassRoomForStudentByEmail(
     @Param("email") email: string,

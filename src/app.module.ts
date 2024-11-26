@@ -14,7 +14,8 @@ import { ClassRoomModule } from "./modules/class-room/class-room.module";
 import { AssignmentModule } from "./modules/assignment/assignment.module";
 import { ClassRoomProgressModule } from "./modules/class-room-progress/class-room-progress.module";
 import { GoogleSchoolSearchModule } from "./modules/google-school-search/google-school-search.module";
-
+import { MailModule } from "./modules/mail/mail.module";
+ 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -24,6 +25,7 @@ import { GoogleSchoolSearchModule } from "./modules/google-school-search/google-
     AssignmentModule,
     ClassRoomProgressModule,
     GoogleSchoolSearchModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
