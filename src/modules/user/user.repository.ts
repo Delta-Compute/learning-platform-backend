@@ -43,6 +43,7 @@ export class UserRepository {
           foreignLanguage: doc.data().foreignLanguage ?? "",
           natureLanguage: doc.data().natureLanguage ?? "",
           auth: doc.data().auth,
+          schoolName: doc.data().schoolName ?? "",
         }) as unknown as User,
     );
 
@@ -68,6 +69,7 @@ export class UserRepository {
       foreignLanguage: document.data().foreignLanguage ?? "",
       natureLanguage: document.data().natureLanguage ?? "",
       school: document.data().school,
+      schoolName: document.data().schoolName ?? "",
     } as User;
   }
 
@@ -95,6 +97,7 @@ export class UserRepository {
       password: document.data().password,
       foreignLanguage: document.data().foreignLanguage ?? "",
       natureLanguage: document.data().natureLanguage ?? "",
+      schoolName: document.data().schoolName ?? "",
     } as User;
   }
 
@@ -133,6 +136,7 @@ export class UserRepository {
       email: doc.data().email,
       role: doc.data().role,
       school: doc.data().school,
+      schoolName: doc.data().schoolName,
     }));
 
     return users as UserInfo[];

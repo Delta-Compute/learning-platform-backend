@@ -17,6 +17,11 @@ export interface User {
   school: School;
   natureLanguage?: string;
   foreignLanguage?: string;
+  schoolName?: string;
+  secretWords?: {
+    color: string;
+    number: number;
+  };
 }
 
 export interface UserInfo {
