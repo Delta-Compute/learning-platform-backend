@@ -12,14 +12,23 @@ export class GoogleSchoolSearchService {
     try {
       const response = await axios.get(`https://maps.googleapis.com/maps/api/place/textsearch/json`, {
         params: {
-          query: `Maple Bear school ${schoolName}`,
+          query: schoolName,
+          type: "school",
           key: apiKey,
         },
       });
 
-      console.log(response.data);
+      const schools = response.data.results.map((school) => ({
+        placeId: school.place_id,
+        name: school.name,
+        address: school.formatted_address, 
+        location: school.geometry.location, 
+      }));
+
+      return schools;
     } catch (error) {
-      
+      console.log(error);
+      return "something went wrong";
     }
   }
 }

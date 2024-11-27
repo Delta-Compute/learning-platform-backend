@@ -30,4 +30,7 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   @IsString()
   @IsOptional()
   foreignLanguage?: string;
+
+  @IsString()
+  schoolName?: string;
 }

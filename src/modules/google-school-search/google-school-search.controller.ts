@@ -10,7 +10,7 @@ export class GoogleSchoolSearchController {
   constructor(private readonly googleSchoolSearchService: GoogleSchoolSearchService) {}
 
   @ApiOperation({ summary: "Find school from google" })
-  @Get("/")
+  @Get("/:schoolName")
   async find(@Param("schoolName") schoolName: string) {
     return await this.googleSchoolSearchService.findSchool(schoolName);
   }

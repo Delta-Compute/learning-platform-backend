@@ -19,6 +19,6 @@ export class MailController {
     @UploadedFile() file: Express.Multer.File,
     @Body() sendMailDto: SendMailDto,
   ) {
-    await this.mailService.sendFile(sendMailDto.email,  sendMailDto.name, file);
+    await this.mailService.sendFile(sendMailDto.email, sendMailDto.name, file);
   }
 }
