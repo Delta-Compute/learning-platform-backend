@@ -70,6 +70,7 @@ export class UserRepository {
       natureLanguage: document.data().natureLanguage ?? "",
       school: document.data().school,
       schoolName: document.data().schoolName ?? "",
+      secretWords: document.data().secretWords ?? null,
     } as User;
   }
 
@@ -98,6 +99,7 @@ export class UserRepository {
       foreignLanguage: document.data().foreignLanguage ?? "",
       natureLanguage: document.data().natureLanguage ?? "",
       schoolName: document.data().schoolName ?? "",
+      secretWords: document.data().secretWords ?? null,
     } as User;
   }
 
