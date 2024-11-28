@@ -4,9 +4,12 @@ import {
   IsEmail,
 } from "class-validator";
 
+import { SecretWords } from "src/common/types/interfaces/user.interface";
+
 export enum AuthType {
   Email = "email",
   Google = "google",
+  Ai = "ai",
 };
 
 export class CreateUserDto {
@@ -37,4 +40,7 @@ export class CreateUserDto {
 
   @IsString()
   auth: AuthType;
+
+  @IsOptional()
+  secretWords?: SecretWords;
 }

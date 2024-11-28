@@ -3,7 +3,12 @@ import { School } from "src/modules/auth/dto/auth-user-dto";
 export enum UserRole {
   Teacher = "teacher",
   Student = "student",
-}
+};
+
+export interface SecretWords {
+  color: string;
+  number: string;
+};
 
 export interface User {
   id: string;
@@ -18,11 +23,8 @@ export interface User {
   natureLanguage?: string;
   foreignLanguage?: string;
   schoolName?: string;
-  secretWords?: {
-    color: string;
-    number: number;
-  };
-}
+  secretWords?: SecretWords;
+};
 
 export interface UserInfo {
   id: string;
@@ -31,4 +33,4 @@ export interface UserInfo {
   firstName: string;
   lastName: string;
   school: School;
-}
+};

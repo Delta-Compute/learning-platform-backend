@@ -9,8 +9,10 @@ import { UserService } from "../user/user.service";
 import { TokenService } from "./token.service";
 
 import { SignInDto, SignUpDto } from "./dto/auth-user-dto";
+import { AuthType } from "../user/dto/create-user.dto";
 
 import { createHash } from "crypto";
+import { SecretWords } from "src/common/types/interfaces/user.interface";
 
 @Injectable()
 export class AuthService {
@@ -20,7 +22,7 @@ export class AuthService {
   ) {}
 
   public async signUp(signUpDto: SignUpDto) {
-    const { email, password, school, auth } = signUpDto;
+    const { email, password, school, auth, secretWords } = signUpDto;
 
     const existingUser = await this.userService.findUserByEmail(email, school, auth); 
 
@@ -28,14 +30,32 @@ export class AuthService {
       throw new ConflictException("User with this email already exists");
     }
 
-    const hashedPassword = this.hashPassword(password);
+    const hashedPassword = this.hashField(password);
 
-    const newUser = await this.userService.createUser({
-      email,
-      school,
-      auth,
-      password: hashedPassword,
-    });
+    let hashedWords: SecretWords;
+
+    if (secretWords) {
+      hashedWords = this.hashWords(signUpDto.secretWords.color, signUpDto.secretWords.number);
+    }
+
+    let newUser;
+
+    if (hashedWords) {
+      newUser = await this.userService.createUser({
+        email,
+        school,
+        auth,
+        password: hashedPassword,
+        secretWords: hashedWords,
+      });
+    } else {
+      newUser = await this.userService.createUser({
+        email,
+        school,
+        auth,
+        password: hashedPassword,
+      });
+    }
 
     const tokens = await this.tokenService.generateTokens({
       sub: newUser.id,
@@ -53,7 +73,7 @@ export class AuthService {
   }
 
   public async signIn(signInDto: SignInDto) {
-    const { email, password, school, auth } = signInDto;
+    const { email, password, school, auth, secretWords } = signInDto;
 
     const user = await this.userService.findUserByEmail(email, school, auth);
 
@@ -61,7 +81,13 @@ export class AuthService {
       throw new NotFoundException("User not found");
     }
 
-    if (!this.isPasswordValid(password, user.password)) {
+    if (auth === AuthType.Ai && secretWords !== undefined && !this.isWordsValid(secretWords, user.secretWords)) {
+      throw new UnauthorizedException("Invalid words");
+    } else if (auth === AuthType.Ai && secretWords === undefined && !this.isPasswordValid(password, user.password)) {
+      throw new UnauthorizedException("Invalid credentials");
+    }
+
+    if (auth !== AuthType.Ai && !this.isPasswordValid(password, user.password)) {
       throw new UnauthorizedException("Invalid credentials");
     }
 
@@ -80,13 +106,31 @@ export class AuthService {
     };
   }
 
-  private hashPassword(password: string): string {
+  private hashField(password: string): string {
     return createHash("sha256").update(password).digest("hex");
   }
 
   private isPasswordValid(password: string, hashedPassword: string): boolean {
-    const hash = this.hashPassword(password);
+    const hash = this.hashField(password);
 
     return hash === hashedPassword;
+  }
+
+  private hashWords = (color: string, number: string): { color: string, number: string } => {
+    const hashedWords = {
+      color,
+      number,
+    };
+
+    hashedWords.color = this.hashField(hashedWords.color);
+    hashedWords.number = this.hashField(hashedWords.number);
+
+    return hashedWords;
+  }
+
+  private isWordsValid = (secretWords: SecretWords, hashedWords: SecretWords) => {
+    const hash = this.hashWords(secretWords.color, secretWords.number);
+
+    return hash.color === hashedWords.color && hash.number === hashedWords.number;
   }
 }

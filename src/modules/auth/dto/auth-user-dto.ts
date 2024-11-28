@@ -6,6 +6,8 @@ import {
 
 import { AuthType } from "src/modules/user/dto/create-user.dto";
 
+import { SecretWords } from "src/common/types/interfaces/user.interface";
+
 type UserRole = "student" | "teacher";
 
 export enum School {
@@ -35,7 +37,10 @@ export class SignInDto extends AuthUserDto {
   email: string;
 
   @IsString()
-  password: string;
+  password?: string;
+
+  @IsOptional()
+  secretWords?: SecretWords;
 }
 
 export class SignUpDto extends SignInDto {
@@ -52,4 +57,7 @@ export class SignUpDto extends SignInDto {
 
   @IsString()
   password: string;
+
+  @IsOptional()
+  secretWords?: SecretWords;
 }

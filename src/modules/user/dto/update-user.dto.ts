@@ -3,10 +3,7 @@ import { CreateUserDto } from "./create-user.dto";
 
 import { IsOptional, IsString } from "class-validator";
 
-interface SecretWords {
-  color: string;
-  number: number;
-};
+import { SecretWords } from "src/common/types/interfaces/user.interface";
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
   @IsOptional()
