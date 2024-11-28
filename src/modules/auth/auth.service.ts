@@ -22,7 +22,7 @@ export class AuthService {
   ) {}
 
   public async signUp(signUpDto: SignUpDto) {
-    const { email, password, school, auth, secretWords } = signUpDto;
+    const { email, password, school, auth } = signUpDto;
 
     const existingUser = await this.userService.findUserByEmail(email, school, auth); 
 
@@ -32,30 +32,12 @@ export class AuthService {
 
     const hashedPassword = this.hashField(password);
 
-    let hashedWords: SecretWords;
-
-    if (secretWords) {
-      hashedWords = this.hashWords(signUpDto.secretWords.color, signUpDto.secretWords.number);
-    }
-
-    let newUser;
-
-    if (hashedWords) {
-      newUser = await this.userService.createUser({
-        email,
-        school,
-        auth,
-        password: hashedPassword,
-        secretWords: hashedWords,
-      });
-    } else {
-      newUser = await this.userService.createUser({
-        email,
-        school,
-        auth,
-        password: hashedPassword,
-      });
-    }
+    const newUser = await this.userService.createUser({
+      email,
+      school,
+      auth,
+      password: hashedPassword,
+    });
 
     const tokens = await this.tokenService.generateTokens({
       sub: newUser.id,
@@ -83,8 +65,6 @@ export class AuthService {
 
     if (auth === AuthType.Ai && secretWords !== undefined && !this.isWordsValid(secretWords, user.secretWords)) {
       throw new UnauthorizedException("Invalid words");
-    } else if (auth === AuthType.Ai && secretWords === undefined && !this.isPasswordValid(password, user.password)) {
-      throw new UnauthorizedException("Invalid credentials");
     }
 
     if (auth !== AuthType.Ai && !this.isPasswordValid(password, user.password)) {

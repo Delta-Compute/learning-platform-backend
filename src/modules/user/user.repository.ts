@@ -9,6 +9,8 @@ import { UpdateUserDto } from "./dto/update-user.dto";
 import { instanceToPlain } from "class-transformer";
 import { School } from "../auth/dto/auth-user-dto";
 
+import { createHash } from "crypto";
+
 @Injectable()
 export class UserRepository {
   private db: FirebaseFirestore.Firestore;
@@ -108,6 +110,14 @@ export class UserRepository {
     updates: Partial<UpdateUserDto>,
   ): Promise<User> {
     const reference = this.collection.doc(id);
+
+    if (updates.secretWords) {
+      updates.secretWords = this.hashWords(
+        updates.secretWords.color,
+        updates.secretWords.number,
+      );
+    }
+
     await reference.update(instanceToPlain(updates));
 
     const updatedDocument = await reference.get();
@@ -142,5 +152,21 @@ export class UserRepository {
     }));
 
     return users as UserInfo[];
+  }
+
+  private hashField(password: string): string {
+    return createHash("sha256").update(password).digest("hex");
+  }
+
+  private hashWords = (color: string, number: string): { color: string, number: string } => {
+    const hashedWords = {
+      color,
+      number,
+    };
+
+    hashedWords.color = this.hashField(hashedWords.color);
+    hashedWords.number = this.hashField(hashedWords.number);
+
+    return hashedWords;
   }
 }
