@@ -26,7 +26,7 @@ export class AuthService {
 
     const existingUser = await this.userService.findUserByEmail(email, school, auth); 
 
-    if (existingUser) {
+    if (existingUser.length > 0) {
       throw new ConflictException("User with this email already exists");
     }
 
@@ -57,31 +57,31 @@ export class AuthService {
   public async signIn(signInDto: SignInDto) {
     const { email, password, school, auth, secretWords } = signInDto;
 
-    const user = await this.userService.findUserByEmail(email, school, auth);
+    const users = await this.userService.findUserByEmail(email, school, auth);
 
-    if (!user) {
+    if (users.length === 0) {
       throw new NotFoundException("User not found");
     }
 
-    if (auth === AuthType.Ai && secretWords !== undefined && !this.isWordsValid(secretWords, user.secretWords)) {
+    if (auth === AuthType.Ai && secretWords !== undefined && !this.isWordsValid(secretWords, users[0].secretWords)) {
       throw new UnauthorizedException("Invalid words");
     }
 
-    if (auth !== AuthType.Ai && !this.isPasswordValid(password, user.password)) {
+    if (auth !== AuthType.Ai && !this.isPasswordValid(password, users[0].password)) {
       throw new UnauthorizedException("Invalid credentials");
     }
 
     const tokens = await this.tokenService.generateTokens({
-      sub: user.id,
+      sub: users[0].id,
     });
 
-    await this.tokenService.updateRefreshToken(user.id, tokens.refreshToken);
+    await this.tokenService.updateRefreshToken(users[0].id, tokens.refreshToken);
 
-    delete user.password;
-    delete user.refreshToken;
+    delete users[0].password;
+    delete users[0].refreshToken;
 
     return {
-      ...user,
+      ...users[0],
       ...tokens,
     };
   }

@@ -76,33 +76,35 @@ export class UserRepository {
     } as User;
   }
 
-  public async findUserByEmail(email: string, school: School, authType: AuthType): Promise<User> {
+  public async findUserByEmail(email: string, school: School, authType: AuthType): Promise<User[]> {
     const querySnapshot = await this.collection
-    .where("email", "==", email)
-    .where("school", "==", school)
-    .where("auth", "==", authType)
-    .limit(1)
-    .get();
+      .where("email", "==", email)
+      .where("school", "==", school)
+      .where("auth", "==", authType)
+      .limit(1)
+      .get();
 
     if (querySnapshot.empty) {
-      return null; 
+      return []; 
     }
 
     const document = querySnapshot.docs[0];
 
-    return {
-      id: document.id,
-      school: document.data().school,
-      firstName: document.data().firstName,
-      lastName: document.data().lastName,
-      email: document.data().email,
-      role: document.data().role,
-      password: document.data().password,
-      foreignLanguage: document.data().foreignLanguage ?? "",
-      natureLanguage: document.data().natureLanguage ?? "",
-      schoolName: document.data().schoolName ?? "",
-      secretWords: document.data().secretWords ?? null,
-    } as User;
+    return [
+      {
+        id: document.id,
+        school: document.data().school,
+        firstName: document.data().firstName,
+        lastName: document.data().lastName,
+        email: document.data().email,
+        role: document.data().role,
+        password: document.data().password,
+        foreignLanguage: document.data().foreignLanguage ?? "",
+        natureLanguage: document.data().natureLanguage ?? "",
+        schoolName: document.data().schoolName ?? "",
+        secretWords: document.data().secretWords ?? null,
+      } as User
+    ];
   }
 
   public async updateById(

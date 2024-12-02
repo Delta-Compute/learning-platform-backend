@@ -12,7 +12,9 @@ import { UpdateUserDto } from "./dto/update-user.dto";
 import { UserService } from "./user.service";
 
 import { ApiTags, ApiOperation, ApiQuery } from "@nestjs/swagger";
+
 import { School } from "../auth/dto/auth-user-dto";
+import { AuthType } from "./dto/create-user.dto";
 
 @ApiTags("Users")
 @Controller()
@@ -51,5 +53,17 @@ export class UserController {
     }
 
     return this.userService.findUserByEmailsList(emailsList, school);
+  }
+
+  @ApiOperation({ summary: "Find user by email" })
+  @Get("/users/find-by-email/:email/:schoolName/:authType")
+  public async findUserByEmail(
+    @Param("email") email: string,
+    @Param("schoolName") schoolName: School,
+    @Param("authType") authType: AuthType,
+  ) {
+    const data = await this.userService.findUserByEmail(email, schoolName, authType);
+
+    return data; 
   }
 }
