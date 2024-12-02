@@ -43,4 +43,7 @@ export class CreateUserDto {
 
   @IsOptional()
   secretWords?: SecretWords;
+
+  @IsString()
+  userSummary?: string;
 }

@@ -46,6 +46,7 @@ export class UserRepository {
           natureLanguage: doc.data().natureLanguage ?? "",
           auth: doc.data().auth,
           schoolName: doc.data().schoolName ?? "",
+          userSummary: doc.data().userSummary ?? "",
         }) as unknown as User,
     );
 
@@ -73,6 +74,7 @@ export class UserRepository {
       school: document.data().school,
       schoolName: document.data().schoolName ?? "",
       secretWords: document.data().secretWords ?? null,
+      userSummary: document.data().userSummary ?? "",
     } as User;
   }
 
@@ -103,6 +105,7 @@ export class UserRepository {
         natureLanguage: document.data().natureLanguage ?? "",
         schoolName: document.data().schoolName ?? "",
         secretWords: document.data().secretWords ?? null,
+        userSummary: document.data().userSummary ?? "",
       } as User
     ];
   }

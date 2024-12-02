@@ -39,4 +39,8 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
 
   @IsOptional()
   secretWords?: SecretWords;
+
+  @IsString()
+  @IsOptional()
+  userSummary?: string;
 }

@@ -24,6 +24,7 @@ export interface User {
   foreignLanguage?: string;
   schoolName?: string;
   secretWords?: SecretWords;
+  userSummary?: string;
 };
 
 export interface UserInfo {
