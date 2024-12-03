@@ -1,4 +1,4 @@
-import { Post, Get, Patch, Param, Body, } from "@nestjs/common";
+import { Post, Get, Patch, Param, Body, Delete, } from "@nestjs/common";
 
 import { Controller } from "@nestjs/common";
 import { AssignmentService } from "./assignment.service";
@@ -20,19 +20,19 @@ export class AssignmentController {
     @Param("school") school: School,
     @Body() createAssignmentDto: CreateAssignmentDto,
   ) {
-    return this.assignmentService.createAssignment(createAssignmentDto, school);
+    return await this.assignmentService.createAssignment(createAssignmentDto, school);
   }
 
   @ApiOperation({ summary: "Get class room assignments" })
   @Get("/assignments/:classRoomId")
   public async getClassRoomAssignments(@Param("classRoomId") classRoomId: string) {
-    return this.assignmentService.getClassRoomAssignments(classRoomId);
+    return await this.assignmentService.getClassRoomAssignments(classRoomId);
   }
 
   @ApiOperation({ summary: "Get all assignments for student" })
   @Get("/assignments/find-assignments/:studentEmail")
   async getAssignmentsByStudentEmail(@Param("studentEmail") studentEmail: string) {
-    return this.assignmentService.getAssignmentsByStudentEmail(studentEmail);
+    return await this.assignmentService.getAssignmentsByStudentEmail(studentEmail);
   }
 
   @ApiOperation({ summary: "Get all assignments for student" })
@@ -41,8 +41,15 @@ export class AssignmentController {
     @Param("assignmentId") assignmentId: string,
     @Body() updateAssignmentDto: UpdateAssignmentDto,
   ) {
-    return this.assignmentService.updateAssignmentById(assignmentId, updateAssignmentDto);
+    return await this.assignmentService.updateAssignmentById(assignmentId, updateAssignmentDto);
   }
 
-  // get for student by email
+  @ApiOperation({ summary: "Delete an assignment" })
+  @Delete("/assignment/:assignmentId/:classRoomId")
+  async deleteAssignmentById(
+    @Param("assignmentId") id: string,
+    @Param("classRoomId") classRoomId: string,
+  ) {
+    return await this.assignmentService.deleteAssignmentById(id, classRoomId);
+  }
 }

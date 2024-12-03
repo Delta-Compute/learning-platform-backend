@@ -32,6 +32,7 @@ export class ClassRoomProgressRepository {
   }
 
   public async findClassRoomProgress(classRoomId: string, assignmentId: string) {
+    // can not get if don't have an correct assignment and class room
     const querySnapshot = await this.classRoomProgressCollection
       .where("classRoomId", "==", classRoomId)
       .where("assignmentId", "==", assignmentId)

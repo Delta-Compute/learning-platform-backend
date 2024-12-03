@@ -157,4 +157,28 @@ export class AssignmentRepository {
 
     await assignmentRoomRef.update({ ...updateAssignmentDto });
   }
+
+  public async deleteAssignment(id: string, classRoomId: string) {
+    // delete in assignment collection
+    const document = this.assignmentCollection.doc(id);
+    await document.delete();
+
+    // delete from class room assignments array
+    const classRoomRef = this.classRoomCollection.doc(classRoomId);
+    const classRoom = (await classRoomRef.get()).data();
+    const classRoomAssignmentIds = classRoom.assignmentIds.filter(item => item !== id);
+
+    await classRoomRef.update({ assignmentIds: classRoomAssignmentIds });
+
+    // delete from class room progress
+    const classRoomProgressRef = await this.classRoomsProgressCollection
+      .where("classRoomId", "==", classRoomId)
+      .where("assignmentId", "==", id)
+      .get();
+    
+    const classRoomProgressId = classRoomProgressRef.docs[0].id;
+    const classRoomProgressDocument = this.classRoomsProgressCollection.doc(classRoomProgressId);
+
+    await classRoomProgressDocument.delete();
+  }
 }

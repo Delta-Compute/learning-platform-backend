@@ -148,8 +148,6 @@ export class ClassRoomRepository {
 
     const assignmentsInRange = [];
 
-    console.log(assignmentsDocument);
-
     for (const assignment of assignmentsDocument.docs) {
       const createdAt = assignment.data().createdAt; 
 

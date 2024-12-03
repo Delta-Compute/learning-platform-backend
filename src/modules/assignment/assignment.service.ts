@@ -40,4 +40,8 @@ export class AssignmentService {
   async updateAssignmentById(assignmentId: string, updateAssignmentDto: UpdateAssignmentDto) {
     return await this.assignmentRepository.updateAssignment(assignmentId, updateAssignmentDto);
   }
+
+  async deleteAssignmentById(id: string, classRoomId: string) {
+    return await this.assignmentRepository.deleteAssignment(id, classRoomId);
+  }
 }
