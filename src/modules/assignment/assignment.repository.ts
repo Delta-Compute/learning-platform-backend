@@ -147,8 +147,6 @@ export class AssignmentRepository {
       }
     }
 
-    // return assignments where studentEmails contains this email
-
     return assignments;
   }
 

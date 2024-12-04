@@ -67,4 +67,8 @@ export class ClassRoomService {
   async findClassRoomForStudentByEmail(email: string, school: School) {
     return await this.classRoomRepository.findForStudent(email, school);
   }
+
+  async deleteClassRoomById(id: string) {
+    return await this.classRoomRepository.delete(id);
+  }
 }

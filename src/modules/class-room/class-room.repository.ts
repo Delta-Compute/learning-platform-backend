@@ -221,4 +221,27 @@ export class ClassRoomRepository {
 
     return null;
   } 
+
+  public async delete(id: string) {
+    const classRoomDocument = this.classRoomCollection.doc(id);
+    const classRoom = (await classRoomDocument.get()).data();
+
+    await classRoomDocument.delete();
+
+    // delete class room progress
+    const classRoomProgressRef = await this.classRoomsProgressCollection
+      .where("classRoomId", "==", id)
+      .get();
+
+    for (const classRoomProgressItem of classRoomProgressRef.docs) {
+      const classRoomProgressDocument = this.classRoomsProgressCollection.doc(classRoomProgressItem.id);
+      await classRoomProgressDocument.delete();
+    }  
+
+    // delete assignments
+    for (const assignmentId of classRoom.assignmentIds) {
+      const assignmentDocument = this.assignmentsCollection.doc(assignmentId);
+      await assignmentDocument.delete();
+    }
+  }
 } 

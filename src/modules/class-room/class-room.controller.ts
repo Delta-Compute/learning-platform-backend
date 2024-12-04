@@ -2,6 +2,7 @@ import {
   Controller,
   Post,
   Get,
+  Delete,
   UseInterceptors,
   Body,
   UploadedFile,
@@ -125,5 +126,11 @@ export class ClassRoomController {
     @Param("school") school: School,
   ) {
     return await this.classRoomService.findClassRoomForStudentByEmail(email, school);
+  }
+
+  @ApiOperation({ summary: "Delete class room" })
+  @Delete("/:id")
+  async deleteClassRoom(@Param("id") id: string) {
+    return await this.classRoomService.deleteClassRoomById(id);
   }
 }
