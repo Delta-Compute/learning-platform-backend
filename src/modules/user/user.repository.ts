@@ -66,6 +66,7 @@ export class UserRepository {
     return {
       id: document.id,
       email: document.data().email,
+      auth: document.data().auth,
       firstName: document.data().firstName ?? "",
       lastName: document.data().lastName ?? "",
       role: document.data().role ?? "",

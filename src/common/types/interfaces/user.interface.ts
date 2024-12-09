@@ -1,4 +1,5 @@
 import { School } from "src/modules/auth/dto/auth-user-dto";
+import { AuthType } from "src/modules/user/dto/create-user.dto";
 
 export enum UserRole {
   Teacher = "teacher",
@@ -16,6 +17,7 @@ export interface User {
   lastName?: string;
   phone: string;
   email: string;
+  auth: AuthType;
   refreshToken: string;
   role?: UserRole;
   password: string;
