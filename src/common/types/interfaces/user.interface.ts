@@ -27,6 +27,8 @@ export interface User {
   schoolName?: string;
   secretWords?: SecretWords;
   userSummary?: string;
+  resetCode?: string;
+  resetCodeExpiresAt?: number;
 };
 
 export interface UserInfo {

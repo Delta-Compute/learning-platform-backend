@@ -107,6 +107,8 @@ export class UserRepository {
         schoolName: document.data().schoolName ?? "",
         secretWords: document.data().secretWords ?? null,
         userSummary: document.data().userSummary ?? "",
+        resetCode: document.data().resetCode ?? "",
+        resetCodeExpiresAt: document.data().resetCodeExpiresAt ?? "",
       } as User
     ];
   }

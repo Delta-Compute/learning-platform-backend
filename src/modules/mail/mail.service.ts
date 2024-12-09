@@ -41,4 +41,19 @@ export class MailService {
       throw error;
     }
   }
+
+  async sendResetCode(to: string, resetCode: string) {
+    try {
+      const mailOptions = {
+        from: "Teachers aid",
+        to,
+        subject: "Reset password code from Teachers AI-d",
+        text: `Code: ${resetCode}`,
+      };
+
+      await this.transporter.sendMail(mailOptions);
+    } catch (error) {
+      throw error;
+    }
+  }
 }

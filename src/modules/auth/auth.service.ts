@@ -7,9 +7,12 @@ import {
 
 import { UserService } from "../user/user.service";
 import { TokenService } from "./token.service";
+import { MailService } from "../mail/mail.service";
 
 import { SignInDto, SignUpDto } from "./dto/auth-user-dto";
 import { AuthType } from "../user/dto/create-user.dto";
+import { ResetCodeDto } from "./dto/reset-code-dto";
+import { VerifyResetCodeDto } from "./dto/verify-reset-code-dto";
 
 import { createHash } from "crypto";
 import { SecretWords } from "src/common/types/interfaces/user.interface";
@@ -19,6 +22,7 @@ export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly tokenService: TokenService,
+    private readonly mailService: MailService,
   ) {}
 
   public async signUp(signUpDto: SignUpDto) {
@@ -84,6 +88,46 @@ export class AuthService {
       ...users[0],
       ...tokens,
     };
+  }
+
+  public async sendResetCode(resetCodeDto: ResetCodeDto) {
+    const users = await this.userService.findUserByEmail(resetCodeDto.email, resetCodeDto.school, AuthType.Email); 
+    if (users.length === 0) {
+      throw new NotFoundException("User with this email does not exist or does not use email authorization");
+    }
+
+    const resetCode = Math.floor(100000 + Math.random() * 900000).toString(); 
+    const resetCodeExpiresAt = new Date(Date.now() + 15 * 60 * 1000).getTime();
+
+    await this.userService.updateUserById(users[0].id, { resetCode, resetCodeExpiresAt });
+
+    await this.mailService.sendResetCode(users[0].email, resetCode);
+
+    return { message: "Reset code sent successfully" };
+  }
+
+  public async verifyResetCode(verifyResetCodeDto: VerifyResetCodeDto) {
+    const users = await this.userService.findUserByEmail(verifyResetCodeDto.email, verifyResetCodeDto.school, AuthType.Email); 
+
+    if (users.length === 0) {
+      throw new NotFoundException("User with this email does not exist or does not use email authorization");
+    }
+
+    if (verifyResetCodeDto.code !== users[0]?.resetCode) {
+      throw new NotFoundException("Reset code is not correct"); 
+    }
+
+    if (users[0].resetCodeExpiresAt < new Date().getTime()) {
+      throw new NotFoundException("Reset code has expired");
+    }
+
+    if (verifyResetCodeDto.code === users[0]?.resetCode && users[0].resetCodeExpiresAt > new Date().getTime()) {
+      const hashedNewPassword = this.hashField(verifyResetCodeDto.newPassword);
+
+      await this.userService.updateUserById(users[0].id, { password: hashedNewPassword });
+    }
+
+    return { message: "Password reset successfully" };
   }
 
   private hashField(password: string): string {

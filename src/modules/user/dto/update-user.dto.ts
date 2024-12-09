@@ -1,7 +1,7 @@
 import { PartialType } from "@nestjs/swagger";
 import { CreateUserDto } from "./create-user.dto";
 
-import { IsOptional, IsString } from "class-validator";
+import { IsNumber, IsOptional, IsString } from "class-validator";
 
 import { SecretWords } from "src/common/types/interfaces/user.interface";
 
@@ -43,4 +43,12 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   @IsString()
   @IsOptional()
   userSummary?: string;
+
+  @IsString()
+  @IsOptional()
+  resetCode?: string;
+
+  @IsNumber()
+  @IsOptional()
+  resetCodeExpiresAt?: number;
 }

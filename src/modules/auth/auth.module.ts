@@ -7,6 +7,7 @@ import { UserRepository } from "../user/user.repository";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import { TokenService } from "./token.service";
+import { MailService } from "../mail/mail.service";
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { TokenService } from "./token.service";
     UserService, 
     UserRepository,
     TokenService,
+    MailService,
   ],
   exports: [],
 })

@@ -15,13 +15,11 @@ import { AssignmentModule } from "./modules/assignment/assignment.module";
 import { ClassRoomProgressModule } from "./modules/class-room-progress/class-room-progress.module";
 import { GoogleSchoolSearchModule } from "./modules/google-school-search/google-school-search.module";
 import { MailModule } from "./modules/mail/mail.module";
-import { AppleAuthModule } from "./modules/apple-auth/apple-auth.module";
  
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
-    AppleAuthModule,
     UserModule,
     ClassRoomModule,
     AssignmentModule,
