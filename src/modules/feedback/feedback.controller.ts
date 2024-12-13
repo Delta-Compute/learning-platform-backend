@@ -7,12 +7,12 @@ import { CreateFeedbackDto } from "./dto/create-feedback-dto";
 
 import { ApiTags, ApiOperation } from "@nestjs/swagger";
 
-@ApiTags("Classroom feedback")
-@Controller("class-room-feedback")
+@ApiTags("Application feedback")
+@Controller("app-feedback")
 export class FeedbackController {
   public constructor (private readonly feedbackService: FeedbackService) {}
 
-  @ApiOperation({ summary: "Create class room feedback" })
+  @ApiOperation({ summary: "Create application feedback" })
   @Post("/")
   public async createFeedback(@Body() createFeedbackDto: CreateFeedbackDto) {
     return this.feedbackService.createFeedback(createFeedbackDto);

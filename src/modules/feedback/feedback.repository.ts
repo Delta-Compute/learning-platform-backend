@@ -13,7 +13,7 @@ export class FeedbackRepository {
 
   public constructor() {
     this.db = admin.firestore();
-    this.collection = this.db.collection("class-room-feedback");
+    this.collection = this.db.collection("app-feedback");
   }
 
   public async create(createFeedbackDto: CreateFeedbackDto) {
