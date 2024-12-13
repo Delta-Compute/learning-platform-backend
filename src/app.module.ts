@@ -15,6 +15,9 @@ import { AssignmentModule } from "./modules/assignment/assignment.module";
 import { ClassRoomProgressModule } from "./modules/class-room-progress/class-room-progress.module";
 import { GoogleSchoolSearchModule } from "./modules/google-school-search/google-school-search.module";
 import { MailModule } from "./modules/mail/mail.module";
+import { FeedbackModule } from "./modules/feedback/feedback.module";
+
+import { LiveKitModule } from "./modules/livekit/livekit.module";
  
 @Module({
   imports: [
@@ -22,10 +25,12 @@ import { MailModule } from "./modules/mail/mail.module";
     AuthModule,
     UserModule,
     ClassRoomModule,
+    FeedbackModule,
     AssignmentModule,
     ClassRoomProgressModule,
     GoogleSchoolSearchModule,
     MailModule,
+    LiveKitModule,
   ],
   controllers: [AppController],
   providers: [AppService],
