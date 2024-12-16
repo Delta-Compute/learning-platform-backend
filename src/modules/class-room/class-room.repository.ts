@@ -1,6 +1,6 @@
 import * as admin from "firebase-admin";
 
-import { Injectable } from "@nestjs/common";
+import { Injectable, ConflictException } from "@nestjs/common";
 
 import { ClassRoomDto } from "./entities/class-room.entity";
 import { UpdateClassRoomDto } from "./dto/update-class-room-dto";
@@ -107,14 +107,14 @@ export class ClassRoomRepository {
       .get();
     
     if (document.docs.length === 0) {
-      throw new Error("Wrong verification code");
+      throw new ConflictException("Wrong verification code");
     } 
 
     const classRoom = document.docs[0].data();
     const classRoomId = document.docs[0].id;
 
     if (classRoom.studentEmails.includes(email)) {
-      throw new Error("This email already added");
+      throw new ConflictException("This email already added");
     } else {
       const studentEmails = [...classRoom.studentEmails];
       studentEmails.push(email);
