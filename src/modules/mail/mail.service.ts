@@ -48,7 +48,7 @@ export class MailService {
         from: "Teachers aid",
         to,
         subject: "Reset password code from Teachers AI-d",
-        text: `Code: ${resetCode}`,
+        text: `Verification code for recover password: ${resetCode}`,
       };
 
       await this.transporter.sendMail(mailOptions);
