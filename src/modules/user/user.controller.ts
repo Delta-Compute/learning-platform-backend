@@ -66,4 +66,10 @@ export class UserController {
 
     return data; 
   }
+
+  @ApiOperation({ summary: "Delete user" })
+  @Get("/:id")
+  public async deleteById(@Param("id") id: string) {
+    
+  }
 }

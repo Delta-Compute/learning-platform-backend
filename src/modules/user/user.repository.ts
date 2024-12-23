@@ -139,6 +139,13 @@ export class UserRepository {
   public async deleteById(id: string): Promise<void> {
     const document = this.collection.doc(id);
 
+    // delete all user data =>
+
+    // delete classes
+    // delete all class room progress with classes ids
+    // delete all assignments
+    
+
     await document.delete();
   }
 

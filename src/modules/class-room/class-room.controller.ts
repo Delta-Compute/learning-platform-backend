@@ -51,8 +51,8 @@ export class ClassRoomController {
   }
 
   @ApiOperation({ summary: "Get all class rooms by teacherId" })
-  @Get("/")
-  async getAllClassRoomsByUserId(@Query("teacherId") teacherId: string) {
+  @Get("/teacher-class-rooms/:teacherId")
+  async getAllClassRoomsByUserId(@Param("teacherId") teacherId: string) {
     if (!teacherId) {
       throw new BadRequestException("teacherId is required");
     }
