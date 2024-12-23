@@ -42,7 +42,7 @@ export class UserService {
       throw new NotFoundException("User not found");
     }
 
-    return this.userRepository.deleteById(id);
+    return this.userRepository.delete(id);
   }
 
   public async findUserByEmailsList(emails: string[], school: School) {

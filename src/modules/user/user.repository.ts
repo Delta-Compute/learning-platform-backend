@@ -9,22 +9,34 @@ import { UpdateUserDto } from "./dto/update-user.dto";
 import { instanceToPlain } from "class-transformer";
 import { School } from "../auth/dto/auth-user-dto";
 
-import { createHash } from "crypto";
+import { createHash } from "crypto"; 
 
 @Injectable()
 export class UserRepository {
   private db: FirebaseFirestore.Firestore;
-  private collection: admin.firestore.CollectionReference<
+  private userCollection: admin.firestore.CollectionReference<
+    admin.firestore.DocumentData
+  >;
+  private classRoomCollection: admin.firestore.CollectionReference<
+    admin.firestore.DocumentData
+  >;
+  private assignmentsCollection: admin.firestore.CollectionReference<
+    admin.firestore.DocumentData
+  >;
+  private classRoomsProgressCollection: admin.firestore.CollectionReference<
     admin.firestore.DocumentData
   >;
 
   public constructor() {
     this.db = admin.firestore();
-    this.collection = this.db.collection("users");
+    this.userCollection = this.db.collection("users");
+    this.classRoomCollection = this.db.collection("class-rooms");
+    this.assignmentsCollection = this.db.collection("assignments");
+    this.classRoomsProgressCollection = this.db.collection("class-rooms-progress");
   }
 
   public async create(createUserDto: CreateUserDto) {
-    const reference = await this.collection.add(createUserDto);
+    const reference = await this.userCollection.add(createUserDto);
     const document = await reference.get();
 
     return {
@@ -34,7 +46,7 @@ export class UserRepository {
   }
 
   public async findAll(): Promise<User[]> {
-    const snapshot = await this.collection.get();
+    const snapshot = await this.userCollection.get();
     const documents = snapshot.docs.map(
       (doc) =>
         ({
@@ -56,7 +68,7 @@ export class UserRepository {
   public async findById(
     id: string,
   ): Promise<User | null> {
-    const reference = this.collection.doc(id);
+    const reference = this.userCollection.doc(id);
     const document = await reference.get();
 
     if (!document.exists) {
@@ -80,7 +92,7 @@ export class UserRepository {
   }
 
   public async findUserByEmail(email: string, school: School, authType: AuthType): Promise<User[]> {
-    const querySnapshot = await this.collection
+    const querySnapshot = await this.userCollection
       .where("email", "==", email)
       .where("school", "==", school)
       .where("auth", "==", authType)
@@ -117,7 +129,7 @@ export class UserRepository {
     id: string,
     updates: Partial<UpdateUserDto>,
   ): Promise<User> {
-    const reference = this.collection.doc(id);
+    const reference = this.userCollection.doc(id);
 
     if (updates.secretWords) {
       updates.secretWords = this.hashWords(
@@ -136,21 +148,45 @@ export class UserRepository {
     } as User;
   }
 
-  public async deleteById(id: string): Promise<void> {
-    const document = this.collection.doc(id);
+  public async delete(id: string): Promise<void> {
+    const document = this.userCollection.doc(id);
+    const user = (await document.get()).data();
 
-    // delete all user data =>
+    if (user.role === UserRole.Teacher) {
+      // delete all class rooms
+      const classRoomRef = await this.classRoomCollection
+        .where("teacherId", "==", id)
+        .get();
+      
+      for (const classRoom of classRoomRef.docs) {
+        const classRoomDocument = this.classRoomCollection.doc(classRoom.id);
 
-    // delete classes
-    // delete all class room progress with classes ids
-    // delete all assignments
-    
+        // delete class room progress
+        const classRoomProgressRef = await this.classRoomsProgressCollection
+          .where("classRoomId", "==", classRoom.id)
+          .get();
 
+        for (const classRoomProgressItem of classRoomProgressRef.docs) {
+          const classRoomProgressDocument = this.classRoomsProgressCollection.doc(classRoomProgressItem.id);
+          await classRoomProgressDocument.delete();
+        }  
+
+        // delete assignments
+        for (const assignmentId of classRoom.data().assignmentIds) {
+          const assignmentDocument = this.assignmentsCollection.doc(assignmentId);
+          await assignmentDocument.delete();
+        }
+
+        await classRoomDocument.delete();
+      }
+    }
+
+    // delete user
     await document.delete();
   }
 
   public async getAllByEmails(emails: string[], school: School): Promise<UserInfo[]> {
-    const reference = await this.collection
+    const reference = await this.userCollection
       .where("email", "in", emails)
       .where("role", "==", UserRole.Student)
       .where("school", "==", school)

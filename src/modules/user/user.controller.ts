@@ -1,5 +1,6 @@
 import { 
   Get, 
+  Delete,
   Body, 
   Param, 
   Controller, 
@@ -17,18 +18,18 @@ import { School } from "../auth/dto/auth-user-dto";
 import { AuthType } from "./dto/create-user.dto";
 
 @ApiTags("Users")
-@Controller()
+@Controller("users")
 export class UserController {
   public constructor(private readonly userService: UserService) {}
 
   @ApiOperation({ summary: "Update user by id" })
-  @Patch("/users/:id")
+  @Patch("/:id")
   public async updateById(@Param("id") id: string, @Body() userDto: UpdateUserDto) {
     return this.userService.updateUserById(id, userDto);
   }
 
   @ApiOperation({ summary: "Get user by id" })
-  @Get("/users/:id")
+  @Get("/:id")
   public async getById(@Param("id") id: string) {
     return this.userService.findUserById(id);
   }
@@ -41,7 +42,7 @@ export class UserController {
     description: "List of email addresses",
     required: true,
   })
-  @Get("/users/find-users/find-all/:school")
+  @Get("/find-users/find-all/:school")
   public async findUsersByEmailsList(
     @Param("school") school: School,
     @Query("email") emails: string | string[],
@@ -56,7 +57,7 @@ export class UserController {
   }
 
   @ApiOperation({ summary: "Find user by email" })
-  @Get("/users/find-by-email/:email/:schoolName/:authType")
+  @Get("/find-by-email/:email/:schoolName/:authType")
   public async findUserByEmail(
     @Param("email") email: string,
     @Param("schoolName") schoolName: School,
@@ -68,8 +69,8 @@ export class UserController {
   }
 
   @ApiOperation({ summary: "Delete user" })
-  @Get("/:id")
+  @Delete("/:id")
   public async deleteById(@Param("id") id: string) {
-    
+    return this.userService.deleteUserById(id);
   }
 }
