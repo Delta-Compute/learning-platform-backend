@@ -9,6 +9,7 @@ import { v4 as uuid } from "uuid";
 
 import { Report } from "src/common/types/interfaces/report.interface";
 import { School } from "../auth/dto/auth-user-dto";
+import { StorageService } from "../storage/storage.service";
 
 @Injectable()
 export class ClassRoomRepository {
@@ -23,7 +24,7 @@ export class ClassRoomRepository {
     admin.firestore.DocumentData
   >;
 
-  public constructor() {
+  public constructor(private readonly storageService: StorageService) {
     this.db = admin.firestore();
     this.classRoomCollection = this.db.collection("class-rooms");
     this.assignmentsCollection = this.db.collection("assignments");
@@ -202,12 +203,15 @@ export class ClassRoomRepository {
     return reports;
   }
 
-  public async findForStudent(email: string, school: School): Promise<ClassRoomDto | null> {
+  public async findForStudent(
+    email: string,
+    school: School,
+  ): Promise<ClassRoomDto | null> {
     const document = await this.classRoomCollection
       .where("school", "==", school)
       .get();
-    
-    const schools = Object.values(School);  
+
+    const schools = Object.values(School);
 
     if (!schools.includes(school)) {
       return null;
@@ -220,7 +224,7 @@ export class ClassRoomRepository {
     }
 
     return null;
-  } 
+  };
 
   public async delete(id: string) {
     const classRoomDocument = this.classRoomCollection.doc(id);
@@ -236,12 +240,15 @@ export class ClassRoomRepository {
     for (const classRoomProgressItem of classRoomProgressRef.docs) {
       const classRoomProgressDocument = this.classRoomsProgressCollection.doc(classRoomProgressItem.id);
       await classRoomProgressDocument.delete();
-    }  
+    }
 
     // delete assignments
     for (const assignmentId of classRoom.assignmentIds) {
       const assignmentDocument = this.assignmentsCollection.doc(assignmentId);
       await assignmentDocument.delete();
     }
+
+    // delete class room image
+    this.storageService.deleteImage(classRoom.logo);
   }
 } 

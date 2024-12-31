@@ -82,4 +82,28 @@ export class StorageService {
       throw new BadRequestException("Failed to download or upload the image");
     }
   }
+
+  public async deleteImage(url: string) {
+    const fileName = url.split("/o/")[1].split("?")[0];
+
+    if (!fileName) {
+      throw new BadRequestException("File name is required for deletion");
+    }
+  
+    try {
+      const file = this.bucket.file(fileName);
+  
+      const [exists] = await file.exists();
+
+      if (!exists) {
+        throw new BadRequestException(`File with name ${fileName} does not exist`);
+      }
+  
+      await file.delete();
+    } catch (error) {
+      throw new BadRequestException(
+        `Failed to delete file: ${error.message || error}`
+      );
+    }
+  }
 }

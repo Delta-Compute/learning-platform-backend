@@ -9,11 +9,11 @@ import { StorageService } from "./storage.service";
 
 @Controller("storage")
 export class StorageController {
-  constructor(private readonly srotageService: StorageService) {}
+  constructor(private readonly storageService: StorageService) {}
 
   @Post()
   @UseInterceptors(FileInterceptor("image"))
   create(@UploadedFile() image) {
-    return this.srotageService.uploadImage(image);
+    return this.storageService.uploadImage(image);
   }
 }
