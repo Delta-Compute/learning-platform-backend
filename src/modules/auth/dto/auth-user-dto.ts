@@ -1,8 +1,4 @@
-import {
-  IsString,
-  IsOptional,
-  IsEmail,
-} from "class-validator";
+import { IsString, IsOptional, IsEmail } from "class-validator";
 
 import { AuthType } from "src/modules/user/dto/create-user.dto";
 
@@ -19,7 +15,10 @@ export enum School {
   Beka = "beka",
   Cincinatti = "cincinatti",
   StMary = "st-mary",
-};
+  CNA = "cna",
+  ColegioBis = "colegio-bis",
+  ColegioDante = "colegio-dante",
+}
 
 export class AuthUserDto {
   @IsOptional()
